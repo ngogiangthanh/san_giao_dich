@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <title><?php echo isset($title) ? $title : HOME_TILTE; ?></title>
-        <link rel="shortcut icon" href="public/img/avalon.ico"/>
+        <link rel="shortcut icon" href="public/images/ico/favicon.ico"/>
         <!-- Bootstrap -->
         <link href="public/css/bootstrap.min.css" rel="stylesheet"/>
         <link href="public/css/toastr.css" rel="stylesheet" type="text/css"/>

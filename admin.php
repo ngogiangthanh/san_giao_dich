@@ -28,11 +28,11 @@ if (isset($_GET['action'])) {
 // include file controller tương ứng ===========================================
 $file = 'backend/controllers/' . $controller . '/' . $action . '.php';
 if (file_exists($file)) {
-    //if (isset($_SESSION['login']) && $_SESSION['login'][11] == 1) {
+    if (isset($_SESSION['login']) && $_SESSION['login'][11] == 1) {
         require($file);
-    //} else {
-      //  require('backend/controllers/home/login.php');
-    //}
+    } else {
+        require('backend/controllers/home/login.php');
+    }
 } else {
     show_404();
 }
