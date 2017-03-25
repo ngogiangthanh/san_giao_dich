@@ -21,11 +21,9 @@
             <section class="content">
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12 pull-right">
-                        <div class="row">
-                            <!-- BEGIN CONTENT -->
-                            <?php require('backend/views/home/profiles-details.php'); ?>
-                            <!-- END CONTENT -->
-                        </div>
+                        <!-- BEGIN CONTENT -->
+                        <?php require('backend/views/home/profiles-details.php'); ?>
+                        <!-- END CONTENT -->
                     </div>
                 </div>
             </section>
