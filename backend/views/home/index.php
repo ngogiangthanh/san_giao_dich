@@ -1,27 +1,42 @@
-<?php require('backend/views/common/header.php'); ?>
-<body>
-    <?php require('backend/views/common/navbar.php'); ?>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 col-xs-12 pull-right">
+<?php require('backend/views/commons/header.php'); ?>
+<body class="hold-transition skin-blue sidebar-mini">
+
+    <div class="wrapper">
+        <?php require('backend/views/commons/main-header.php'); ?>
+        <?php require('backend/views/commons/aside.php'); ?>
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    Bảng điều khiển 
+                    <small>v1.0</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="admin.php"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+                    <li class="active">Bảng điều khiển</li>
+                </ol>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
                 <div class="row">
-                    <!-- BEGIN CONTENT -->
-                    <?php require('backend/views/home/menu.php'); ?>
-                    <!-- END CONTENT -->
+                    <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12 pull-right">
+                        <div class="row">
+                            <!-- BEGIN CONTENT -->
+                            <?php require('backend/views/home/menu.php'); ?>
+                            <!-- END CONTENT -->
+                        </div>
+                    </div>
+
                 </div>
-            </div><!--/span-->            
-        </div><!--/row-->
-    </div><!--/.container-->
-    <script type="text/javascript" src="public/js/jquery-1.10.0.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script type="text/javascript" src="public/js/bootstrap.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('#sidebar .panel-heading').click(function() {
-                $('#sidebar .list-group').toggleClass('hidden-xs');
-                $('#sidebar .panel-heading b').toggleClass('glyphicon-plus-sign').toggleClass('glyphicon-minus-sign');
-            });
-        });
-    </script>
+            </section>
+        </div>
+
+        <?php require('backend/views/commons/footer.php'); ?>
+        <?php require('backend/views/commons/sidebar.php'); ?>
+    </div>
+    <div class="control-sidebar-bg"></div>
+
+    <?php require('backend/views/commons/js.php'); ?>
 </body>
 </html>

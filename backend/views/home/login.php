@@ -1,58 +1,41 @@
-<?php require('backend/views/common/header.php'); ?>
+<?php require('backend/views/commons/header.php'); ?>
 
-<body>
-    <nav class="navbar navbar-inverse" role="navigation">
-        <div class="container">
-            <a class="navbar-brand" href=""><i
-                    class="glyphicon glyphicon-th-large"></i>&nbsp;&nbsp;<?= LOGIN_TITLE ?></a>
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="admin.php"><b>Quản trị hệ thống</b></a>
         </div>
-    </div>
-    <!-- /.container-fluid -->
-</nav>
-<div class="container">
-    <div class="row">
-        <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
-            <div class="row">
-                <!-- BEGIN CONTENT -->
-                <div id="login">
-                    <div class="container">
-                        <div class="panel panel-default">
-                            <div class="panel-heading ">
-                                <h4>
-                                    <i class="glyphicon glyphicon-cog"></i>&nbsp;&nbsp;<?= LOGIN_TITLE ?>
-                                </h4>
-                            </div>
-                            <div class="panel-body">
-                                <form method="post" action="login.html" class="form-signin"
-                                      role="form" onsubmit="">
-                                    <div class="form-group">
-                                        <input name="username" type="text"
-                                               class="form-control input-lg"
-                                               placeholder="<?= LOGIN_USERNAME_PLACEHOLDER ?>" required="" autofocus>
-                                    </div>
-                                    <div class="form-group">
-                                        <input name="password" type="password"
-                                               class="form-control input-lg" placeholder="<?= LOGIN_PASSWORD_PLACEHOLDER ?>"
-                                               required="">
-                                    </div>
-                                    <button class="btn btn-lg btn-primary btn-block" type="submit"><?= LOGIN_SUBMIT_BUTTON ?></button>
-                                </form>
-                            </div>
-                        </div>
-                        <!-- /container -->
-                    </div>
+        <!-- /.login-logo -->
+        <div class="login-box-body">
+            <p class="login-box-msg">Đăng nhập để sử dụng chức năng quản trị sàn</p>
+
+            <form action="admin.php?controller=home&action=login" method="post">
+                <div class="form-group has-feedback">
+                    <input type="text" name="username" class="form-control" placeholder="Nhập tài khoản">
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
                 </div>
-                <!-- END CONTENT -->
-            </div>
+                <div class="form-group has-feedback">
+                    <input type="password" name="password"  class="form-control" placeholder="Nhập mật khẩu">
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div class="row">
+                    <div class="col-xs-8">
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-xs-4">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">Đăng nhập</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
         </div>
-        <!--/span-->
+        <!-- /.login-box-body -->
     </div>
-    <!--/row-->
-</div>
-<!--/.container-->
-<script type="text/javascript" src="public/js/jquery-1.10.0.min.js"></script>
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-<script type="text/javascript" src="public/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="public/js/toastr.js"></script>
+    <!-- /.login-box -->
+
+    <!-- jQuery 2.2.3 -->
+    <script src="./backend/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="./backend/public/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

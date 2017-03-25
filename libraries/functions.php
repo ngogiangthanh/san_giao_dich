@@ -7,7 +7,7 @@ include_once 'resizeimg.php';
  */
 function show_404() {
     header('HTTP/1.1 Not Found 404', true, 404);
-    require('./404.php');
+    require('./backend/views/404.php');
     exit();
 }
 
@@ -29,15 +29,15 @@ function escape($str) {
  */
 function pagination($url, $page, $total) {
     $adjacents = 2;
-    $prevlabel = "&lsaquo; ".PAGING_PREVIOUS;
-    $nextlabel = PAGING_NEXT." &rsaquo;";
+    $prevlabel = "&lsaquo; " . PAGING_PREVIOUS;
+    $nextlabel = PAGING_NEXT . " &rsaquo;";
     $out = '<ul class="pagination">';
 
     //first
     if ($page == 1) {
-        $out.= '<li class="disabled"><span>'.PAGING_FIRST.'</span></li>';
+        $out.= '<li class="disabled"><span>' . PAGING_FIRST . '</span></li>';
     } else {
-        $out.='<li><a href="' . $url . '">'.PAGING_FIRST.'</a></li>';
+        $out.='<li><a href="' . $url . '">' . PAGING_FIRST . '</a></li>';
     }
 
     // previous
@@ -70,9 +70,9 @@ function pagination($url, $page, $total) {
 
     //last
     if ($page < $total) {
-        $out.= '<li><a href="' . $url . '&amp;page=' . $total . '">'.PAGING_END.'</a></li>';
+        $out.= '<li><a href="' . $url . '&amp;page=' . $total . '">' . PAGING_END . '</a></li>';
     } else {
-        $out.= '<li class="disabled"><span>'.PAGING_END.'</span></li>';
+        $out.= '<li class="disabled"><span>' . PAGING_END . '</span></li>';
     }
 
     $out.= '</ul>';
@@ -147,11 +147,11 @@ function upload($field, $config = array()) {
         $resizeObj->saveImage($file_path_thumb, 100);
         return array("img" => $file_path, "thumb" => $file_path_thumb);
     } else { //up FILE PDF
-          if ($options['overwrite'] && file_exists($file_path)) {
-                    unlink($file_path);
-                }
-                move_uploaded_file($file["tmp_name"], $file_path);
-                return $file_path;
+        if ($options['overwrite'] && file_exists($file_path)) {
+            unlink($file_path);
+        }
+        move_uploaded_file($file["tmp_name"], $file_path);
+        return $file_path;
 //        $finfo = finfo_open(FILEINFO_MIME_TYPE);
 //        $mime = finfo_file($finfo, $file["tmp_name"]);
 //        switch ($mime) {
