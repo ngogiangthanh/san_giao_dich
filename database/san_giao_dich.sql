@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 25, 2017 at 08:10 PM
+-- Generation Time: Mar 26, 2017 at 06:46 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -49,20 +49,33 @@ BEGIN
 															AND nguoi_dung.TRANG_THAI = 1;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `user_select`(IN `tk` varchar(128), IN `offset` int, IN `limit` int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_select`(IN `key` varchar(128), IN `offset` int, IN `limit` int)
 BEGIN
 	SELECT 
 		*
 	FROM
 		nguoi_dung
 	WHERE
-		(nguoi_dung.TAI_KHOAN LIKE CONCAT('%',`tk`,'%') OR `tk` IS NULL)
+		(nguoi_dung.TAI_KHOAN LIKE CONCAT('%',`key` ,'%') OR `key` IS NULL) OR
+		(nguoi_dung.HO_TEN LIKE CONCAT('%',`key` ,'%') OR `key` IS NULL)
 	ORDER BY
 		nguoi_dung.QUYEN_HAN DESC,
 		nguoi_dung.TRANG_THAI ASC,
 		nguoi_dung.ID ASC
 	LIMIT 
 		`offset` , `limit` ;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_select_lastest`()
+BEGIN
+	SELECT 
+		*
+	FROM
+		nguoi_dung
+	ORDER BY
+		nguoi_dung.THOI_DIEM_TAO DESC
+	LIMIT 
+		0 , 8;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `user_update`(IN `id` int,IN `url_dai_dien` varchar(200),IN `ho_ten` varchar(200),IN `gioi_tinh` tinyint,IN `dia_chi` varchar(200),IN `email` varchar(256),IN `sdt` char(20),IN `tk` varchar(128),IN `mk` varchar(128),IN `quyen_han` tinyint,IN `trang_thai` tinyint)
@@ -319,23 +332,23 @@ CREATE TABLE IF NOT EXISTS `nguoi_dung` (
 --
 
 INSERT INTO `nguoi_dung` (`ID`, `URL_DAI_DIEN`, `HO_TEN`, `GIOI_TINH`, `DIA_CHI`, `EMAIL`, `SDT`, `TAI_KHOAN`, `MAT_KHAU`, `QUYEN_HAN`, `TRANG_THAI`, `THOI_DIEM_TAO`, `NGAY_SINH`, `CAU_NOI`) VALUES
-(1, './uploads/images/avatar/1_thanh.jpg', 'Ngô Giang Thanh', 1, '132/28, đường 3 tháng 2, p. Hưng Lợi, q. Ninh Kiều, tp. Cần Thơ', 'thanhthanh1516@gmail.com', '0946344233', 'ngogiangthanh', '35705de1978a792d689f6725d5926225', 2, 1, '2017-03-01 19:22:30', '1992-01-01', 'To make something special, you just have to believe it''s speical'),
+(1, './uploads/images/avatar/ngogiangthanh.jpg', 'Ngô Giang Thanh', 1, '132/28, đường 3 tháng 2, p. Hưng Lợi, q. Ninh Kiều, tp. Cần Thơ', 'thanhthanh1516@gmail.com', '0946344233', 'ngogiangthanh', '35705de1978a792d689f6725d5926225', 2, 1, '2017-03-01 19:22:30', '1992-01-01', 'To make something special, you just have to believe it''s speical'),
 (3, './uploads/images/avatar/default.png', 'anonymous1', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous1', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-02 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
 (4, './uploads/images/avatar/default.png', 'anonymous2', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous2', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-03 09:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(5, './uploads/images/avatar/default.png', 'anonymous3', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous3', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-03 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(6, './uploads/images/avatar/default.png', 'anonymous4', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous4', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-04 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(7, './uploads/images/avatar/default.png', 'anonymous5', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous5', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-05 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(5, './uploads/images/avatar/default.png', 'anonymous3', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous3', '35705de1978a792d689f6725d5926225', 1, 2, '2017-03-03 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(6, './uploads/images/avatar/default.png', 'anonymous4', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous4', '35705de1978a792d689f6725d5926225', 1, 2, '2017-03-04 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(7, './uploads/images/avatar/default.png', 'anonymous5', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous5', '35705de1978a792d689f6725d5926225', 1, 3, '2017-03-05 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
 (8, './uploads/images/avatar/default.png', 'anonymous6', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous6', '35705de1978a792d689f6725d5926225', 1, 3, '2017-03-06 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(9, './uploads/images/avatar/default.png', 'anonymous7', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous7', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-07 09:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(9, './uploads/images/avatar/default.png', 'anonymous7', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous7', '35705de1978a792d689f6725d5926225', 1, 2, '2017-03-07 09:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
 (10, './uploads/images/avatar/default.png', 'anonymous8', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous8', '35705de1978a792d689f6725d5926225', 1, 3, '2017-03-07 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(11, './uploads/images/avatar/default.png', 'anonymous9', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous9', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-08 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(12, './uploads/images/avatar/default.png', 'anonymous10', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous10', '35705de1978a792d689f6725d5926225', 1, 3, '2017-03-10 17:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(13, './uploads/images/avatar/default.png', 'anonymous11', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous11', '35705de1978a792d689f6725d5926225', 1, 3, '2017-03-10 18:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(14, './uploads/images/avatar/default.png', 'anonymous12', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous12', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-10 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(15, './uploads/images/avatar/default.png', 'anonymous13', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous13', '35705de1978a792d689f6725d5926225', 1, 3, '2017-03-10 19:42:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(16, './uploads/images/avatar/default.png', 'anonymous14', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous14', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-10 21:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(17, './uploads/images/avatar/default.png', 'anonymous15', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous15', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-11 08:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(18, './uploads/images/avatar/default.png', 'NGUYỄN THANH QUY', 1, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous16', '35705de1978a792d689f6725d5926225', 1, 3, '2017-03-11 09:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu');
+(11, './uploads/images/avatar/anonymous09.jpg', 'anonymous9', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous9', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-08 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(12, './uploads/images/avatar/anonymous10.jpg', 'anonymous10', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous10', '35705de1978a792d689f6725d5926225', 1, 3, '2017-03-10 17:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(13, './uploads/images/avatar/anonymous11.jpg', 'anonymous11', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous11', '35705de1978a792d689f6725d5926225', 1, 3, '2017-03-10 18:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(14, './uploads/images/avatar/anonymous12.jpg', 'anonymous12', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous12', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-10 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(15, './uploads/images/avatar/anonymous13.jpg', 'anonymous13', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous13', '35705de1978a792d689f6725d5926225', 1, 3, '2017-03-10 19:42:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(16, './uploads/images/avatar/anonymous14.jpg', 'anonymous14', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous14', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-25 21:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(17, './uploads/images/avatar/anonymous15.jpg', 'anonymous15', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous15', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-25 08:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(18, './uploads/images/avatar/anonymous16.jpg', 'NGUYỄN THANH QUY', 1, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous16', '35705de1978a792d689f6725d5926225', 1, 3, '2017-03-26 09:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu');
 
 -- --------------------------------------------------------
 
