@@ -205,7 +205,7 @@
                     </form>
                     <!-- /.modal -->
 
-                    <form class="form-horizontal">
+                    <form id="uploadimage" action="" method="post" enctype="multipart/form-data">
                         <div class="modal" id="upload_avatar" tabindex="-1" role="dialog" data-backdrop="false">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -217,17 +217,8 @@
                                     <div class="modal-body">
                                         <div class="form-group">
                                             <label class="col-md-4 control-label" for="fileAvatar">Chọn ảnh:</label>
-                                            <div class="col-md-4">
-                                                <input id="fileAvatar" name="fileAvatar" class="input-file" type="file">
-                                            </div>
-                                        </div>
-
-                                        <!-- Button (Double) -->
-                                        <div class="form-group">
-                                            <label class="col-md-4 control-label" for="btnSaveAvatar"></label>
-                                            <div class="col-md-8">
-                                                <button type="submit" id="btnSaveAvatar" name="btnSaveAvatar" class="btn btn-success">Tải lên</button>
-                                                <button type="reset" id="btnClearAvatar" name="btnClearAvatar" class="btn btn-default">Xóa</button>
+                                            <div class="col-md-4 center">
+                                                <input id="avatar-2" name="file" type="file" class="file-loading" >
                                             </div>
                                         </div>
                                     </div>

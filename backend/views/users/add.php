@@ -13,7 +13,8 @@
                 </h1>
                 <ol class="breadcrumb">
                     <li><a href="admin.php"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
-                    <li class="active">Trang quản lý thành viên</li>
+                    <li><a href="admin.php?controller=users">Trang quản lý thành viên</a></li>
+                    <li class="active">Thêm mới thành viên</li>
                 </ol>
             </section>
 
@@ -22,7 +23,7 @@
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12 pull-right">
                         <!-- BEGIN CONTENT -->
-                        <?php require('backend/views/users/main.php'); ?>
+                        <?php require('backend/views/users/form.php'); ?>
                         <!-- END CONTENT -->
                     </div>
 

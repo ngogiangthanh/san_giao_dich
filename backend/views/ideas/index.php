@@ -1,8 +1,7 @@
 <?php require('backend/views/commons/header.php'); ?>
-  <!-- DataTables -->
-  <link rel="stylesheet" href="./backend/public/plugins/datatables/dataTables.bootstrap.css">
+<!-- DataTables -->
+<link rel="stylesheet" href="./backend/public/plugins/datatables/dataTables.bootstrap.css">
 <body class="hold-transition skin-blue sidebar-mini">
-
     <div class="wrapper">
         <?php require('backend/views/commons/main-header.php'); ?>
         <?php require('backend/views/commons/aside.php'); ?>
@@ -23,11 +22,10 @@
             <section class="content">
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                            <!-- BEGIN CONTENT -->
-                            <?php require('backend/views/ideas/table.php'); ?>
-                            <!-- END CONTENT -->
+                        <!-- BEGIN CONTENT -->
+                        <?php require('backend/views/ideas/table.php'); ?>
+                        <!-- END CONTENT -->
                     </div>
-
                 </div>
             </section>
         </div>
@@ -42,9 +40,9 @@
     <script src="./backend/public/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="./backend/public/plugins/datatables/dataTables.bootstrap.min.js"></script>
     <script>
-  $(function () {
-    $("#example1").DataTable();
-  });
-</script>
+        $(function () {
+            $("#example1").DataTable();
+        });
+    </script>
 </body>
 </html>

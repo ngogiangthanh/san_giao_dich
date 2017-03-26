@@ -68,14 +68,14 @@
             <li class="treeview">
                 <a href="admin.php?controller=users">
                     <i class="fa fa-user"></i>
-                    <span>Quản lý người dùng</span>
+                    <span>Quản lý thành viên</span>
                     <span class="pull-right-container">
                         <i class="fa fa-angle-left pull-right"></i>
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="admin.php?controller=users&action=list"><i class="fa fa-list"></i>&nbsp;Danh sách người dùng</a></li>
-                    <li><a href="admin.php?controller=users&action=add"><i class="fa fa-plus"></i>&nbsp;Thêm mới mới người dùng</a></li>
+                    <li><a href="admin.php?controller=users&action=list"><i class="fa fa-list"></i>&nbsp;Danh sách thành viên</a></li>
+                    <li><a href="admin.php?controller=users&action=add"><i class="fa fa-plus"></i>&nbsp;Thêm mới thành viên</a></li>
                 </ul>
             </li>
             <li class="treeview">

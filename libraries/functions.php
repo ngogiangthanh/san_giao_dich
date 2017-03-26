@@ -31,7 +31,7 @@ function pagination($url, $page, $total) {
     $adjacents = 2;
     $prevlabel = "&lsaquo; " . PAGING_PREVIOUS;
     $nextlabel = PAGING_NEXT . " &rsaquo;";
-    $out = '<ul class="pagination">';
+    $out = '<ul class="pagination pagination-sm no-margin pull-right">';
 
     //first
     if ($page == 1) {
@@ -201,4 +201,19 @@ function alias($str) {
     $str = strtolower($str);
     $str = str_replace(' ', '-', $str);
     return $str;
+}
+
+function get_day_name($timestamp) {
+
+    $date = date_format(date_create($timestamp),'d/m/Y');
+    $yesterday = mktime(0, 0, 0, date("m"), date("d")-1,   date("Y"));
+    
+    if($date == date('d/m/Y')) {
+      $date = 'Hôm nay';
+    } 
+    else if($date == date('d/m/Y',$yesterday)) {
+      $date = 'Hôm qua';
+    }
+    
+    return $date;
 }

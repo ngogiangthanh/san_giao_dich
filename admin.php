@@ -1,6 +1,12 @@
 ﻿<?php
 session_start();
 define("ADMINISTRATOR", 2);
+define("LIMIT_PER_PAGE", 5);
+define("PAGING_PREVIOUS", 'Trang trước');
+define("PAGING_NEXT", 'Trang kế');
+define("PAGING_FIRST", 'Trang đầu');
+define("PAGING_END", 'Trang cuối');
+
 include_once './libraries/functions.php';
 include_once './libraries/workwithdb.php';
 
