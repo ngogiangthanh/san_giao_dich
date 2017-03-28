@@ -38,5 +38,18 @@
     <div class="control-sidebar-bg"></div>
 
     <?php require('backend/views/commons/js.php'); ?>
+
+    <script type="text/javascript">
+        toastr.options.closeButton = true;
+        toastr.options.newestOnTop = true;
+        <?php
+        $message_success = show_message("success");
+        if ($message_success != NULL) {
+            ?>
+                    toastr.success("<?= $message_success ?>");
+            <?php
+        }
+        ?>
+    </script>
 </body>
 </html>

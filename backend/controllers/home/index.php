@@ -13,9 +13,9 @@ $gender = array(
 );
 
 
-$totalContact = contactCount($conn->dbh);
-$totalIdea = ideaCount($conn->dbh);
-$totalSolution = solutionCount($conn->dbh);
-$totalUser = userCount($conn->dbh);
+$totalContact = contactCount($conn->app);
+$totalIdea = ideaCount($conn->app);
+$totalSolution = solutionCount($conn->app);
+$totalUser = userCount($conn->app);
 //load view ====================================================================
 require('./backend/views/home/index.php');

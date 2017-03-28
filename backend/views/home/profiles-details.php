@@ -79,7 +79,7 @@
 
                             <div class="input-group">
                                 <input type="text" class="form-control" id="inputAvatar" name="avatar" aria-describedby="basic-addon-avatar" value="<?= $_SESSION['login']['URL_DAI_DIEN'] ?>" readonly/>
-                                <span class="input-group-addon" id="basic-addon-avatar"  data-toggle="modal" data-target="#upload_avatar" >Upload</span>
+                                <span class="input-group-addon" id="basic-addon-avatar" data-toggle="modal" data-target="#upload_avatar" >Upload</span>
                             </div>
                         </div>
                     </div>
@@ -190,7 +190,7 @@
                                         <div class="form-group">
                                             <label class="col-md-4 control-label" for="btnSave"></label>
                                             <div class="col-md-8">
-                                                <button type="submit" id="btnSave" name="btnSave" class="btn btn-success">Tải lên</button>
+                                                <button type="submit" id="btnSave" name="btnSave" class="btn btn-success">Lưu</button>
                                                 <button type="reset" id="btnClear" name="btnClear" class="btn btn-default">Xóa</button>
                                             </div>
                                         </div>
@@ -231,7 +231,6 @@
                         </div>
                     </form>
                     <!-- /.modal -->
-                </form>
             </div>
             <!-- /.tab-pane -->
         </div>

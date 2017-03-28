@@ -129,8 +129,8 @@ function upload($field, $config = array()) {
     }
 
     $name = empty($options['name']) ? $file["name"] : $options['name'] . '.' . $ext;
-    $file_path = $options['upload_path'] . $name;
-    $file_path_thumb = $options['upload_path'] . "thumb_" . $name;
+    $file_path = $options['upload_path'] . "org_" . $name;
+    $file_path_thumb = $options['upload_path'] . $name;
 
     if ($options['type'] == 'image') { //neu up dang hinh thi up them anh thumb
         //nếu cho phép ghi đè
@@ -142,7 +142,7 @@ function upload($field, $config = array()) {
         // *** 1) Initialize / load image
         $resizeObj = new resizeimg($file_path);
         // *** 2) Resize image (options: exact, portrait, landscape, auto, crop)
-        $resizeObj->resizeImage(200, 200);
+        $resizeObj->resizeImage(300, 300, 'crop');
         // *** 3) Save image
         $resizeObj->saveImage($file_path_thumb, 100);
         return array("img" => $file_path, "thumb" => $file_path_thumb);
@@ -152,16 +152,6 @@ function upload($field, $config = array()) {
         }
         move_uploaded_file($file["tmp_name"], $file_path);
         return $file_path;
-//        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-//        $mime = finfo_file($finfo, $file["tmp_name"]);
-//        switch ($mime) {
-//            case 'image/jpeg':
-//            case 'application/pdf':
-//                //nếu cho phép ghi đè
-//              
-//            default:
-//                return FALSE; //kiem tra khong hop le dinh dang
-//        }
     }
 }
 
@@ -205,15 +195,45 @@ function alias($str) {
 
 function get_day_name($timestamp) {
 
-    $date = date_format(date_create($timestamp),'d/m/Y');
-    $yesterday = mktime(0, 0, 0, date("m"), date("d")-1,   date("Y"));
-    
-    if($date == date('d/m/Y')) {
-      $date = 'Hôm nay';
-    } 
-    else if($date == date('d/m/Y',$yesterday)) {
-      $date = 'Hôm qua';
+    $date = date_format(date_create($timestamp), 'd/m/Y');
+    $yesterday = mktime(0, 0, 0, date("m"), date("d") - 1, date("Y"));
+
+    if ($date == date('d/m/Y')) {
+        $date = 'Hôm nay';
+    } else if ($date == date('d/m/Y', $yesterday)) {
+        $date = 'Hôm qua';
     }
-    
+
     return $date;
+}
+
+function show_message($type) {
+    $message = NULL;
+    switch ($type) {
+        case "error":
+            if (isset($_SESSION['message']['error'])) {
+                $message = $_SESSION['message']['error'];
+                unset($_SESSION['message']['error']);
+            }
+            break;
+        case "success":
+            if (isset($_SESSION['message']['success'])) {
+                $message = $_SESSION['message']['success'];
+                unset($_SESSION['message']['success']);
+            }
+            break;
+        case "warning":
+            if (isset($_SESSION['message']['warning'])) {
+                $message = $_SESSION['message']['warning'];
+                unset($_SESSION['message']['warning']);
+            }
+            break;
+        case "info":
+            if (isset($_SESSION['message']['info'])) {
+                $message = $_SESSION['message']['info'];
+                unset($_SESSION['message']['info']);
+            }
+            break;
+    }
+    return $message;
 }

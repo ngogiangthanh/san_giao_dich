@@ -6,6 +6,7 @@ define("PAGING_PREVIOUS", 'Trang trước');
 define("PAGING_NEXT", 'Trang kế');
 define("PAGING_FIRST", 'Trang đầu');
 define("PAGING_END", 'Trang cuối');
+define("URL_UPLOAD", "./uploads/images/avatar/");
 
 include_once './libraries/functions.php';
 include_once './libraries/workwithdb.php';
@@ -15,16 +16,16 @@ $action = isset($_GET['action']) ? $_GET['action'] : 'index';
 $file = 'backend/controllers/' . $controller . '/' . $action . '.php';
 
 if (file_exists($file)) {
-    
+
     $conn = new workwithdb();
     $conn->CreateConnection();
-    
+
     if (isset($_SESSION['login']) && $_SESSION['login']['QUYEN_HAN'] == ADMINISTRATOR) {
         require($file);
     } else {
         require('backend/controllers/home/login.php');
     }
-    
+
     $conn->CloseConnection();
 } else {
     //404 page error

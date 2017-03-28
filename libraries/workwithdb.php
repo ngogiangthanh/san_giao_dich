@@ -2,7 +2,7 @@
 
 class workwithdb {
 
-    public $dbh = null;
+    public $app = null;
 
     public function CreateConnection() {
         define('CONFIG_TIME_ZONE', 'Asia/Ho_Chi_Minh');
@@ -12,8 +12,8 @@ class workwithdb {
         define('CONFIG_DATABASE', 'san_giao_dich');
 
         try {
-            $this->dbh = new PDO('mysql:host=' . CONFIG_HOST_NAME . ';dbname=' . CONFIG_DATABASE, CONFIG_USERNAME, CONFIG_PASSWORD, [PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8';"]);
-            $this->dbh->exec("SET time_zone = '{" . CONFIG_TIME_ZONE . "'");
+            $this->app = new PDO('mysql:host=' . CONFIG_HOST_NAME . ';dbname=' . CONFIG_DATABASE, CONFIG_USERNAME, CONFIG_PASSWORD, [PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8';"]);
+            $this->app->exec("SET time_zone = '{" . CONFIG_TIME_ZONE . "'");
         } catch (PDOException $e) {
             print "Error!: " . $e->getMessage() . "<br/>";
             die();
@@ -21,7 +21,7 @@ class workwithdb {
     }
 
     public function CloseConnection() {
-        $this->dbh = null;
+        $this->app = null;
     }
 
 }

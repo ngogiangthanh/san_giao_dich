@@ -64,7 +64,6 @@
                 $('#uploadimage').submit();
             });
             $("#uploadimage").on('submit', (function (e) {
-                console.log('123');
                 e.preventDefault();
                 $("#message").empty();
                 $('#loading').show();

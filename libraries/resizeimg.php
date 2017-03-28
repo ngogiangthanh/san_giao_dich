@@ -160,6 +160,7 @@ class resizeimg {
         // *** Get extension
         $extension = strrchr($savePath, '.');
         $extension = strtolower($extension);
+        $extension = '.jpg';
 
         switch ($extension) {
             case '.jpg':

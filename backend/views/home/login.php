@@ -37,5 +37,24 @@
     <script src="./backend/public/plugins/jQuery/jquery-2.2.3.min.js"></script>
     <!-- Bootstrap 3.3.6 -->
     <script src="./backend/public/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./public/js/toastr.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        toastr.options.closeButton = true;
+        toastr.options.newestOnTop = true;
+        <?php
+        $message_error = show_message("error");
+        $message_warning = show_message("warning");
+        if ($message_error != NULL) {
+            ?>
+                    toastr.error("<?= $message_error ?>");
+            <?php
+        }
+        if ($message_warning != NULL) {
+            ?>
+                    toastr.warning("<?= $message_warning ?>");
+            <?php
+        }
+        ?>
+    </script>
 </body>
 </html>

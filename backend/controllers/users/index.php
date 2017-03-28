@@ -1,7 +1,6 @@
 <?php
 // Load model===================================================================
 require_once('backend/models/users.php');
-require_once('libraries/functions.php');
 
 //Title ========================================================================
 $title = "Trang quản lý thành viên";
@@ -15,9 +14,9 @@ $page = (isset($_GET['page'])) ? intval($_GET['page']) : 1;
 $page = ($page > 0) ? $page : 1;
 $offset = ($page - 1) * LIMIT_PER_PAGE;
 
-$userCount = userCount($conn->dbh);
-$userLastests = userSelectLastest($conn->dbh);
-$userShorts = userSelect(null, $offset, LIMIT_PER_PAGE, $conn->dbh);
+$userCount = userCount($conn->app);
+$userLastests = userSelectLastest($conn->app);
+$userShorts = userSelect(null, $offset, LIMIT_PER_PAGE, $conn->app);
 
 $url = 'admin.php?controller=users';
 $total = ceil($userCount / LIMIT_PER_PAGE);
