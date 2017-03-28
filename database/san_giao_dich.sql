@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 26, 2017 at 06:46 PM
+-- Generation Time: Mar 28, 2017 at 12:11 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -39,6 +39,25 @@ BEGIN
 			SET nguoi_dung.TRANG_THAI = 2
 			WHERE nguoi_dung.ID = `id`;
 	DELETE FROM nguoi_dung WHERE nguoi_dung.id = `id`;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_insert`(IN `url_dai_dien` varchar(200),IN `ngay_sinh` date, IN `ho_ten` varchar(200),IN `gioi_tinh` tinyint,IN `dia_chi` varchar(200),IN `email` varchar(256),IN `sdt` char(20),IN `tk` varchar(128),IN `mk` varchar(128),IN `mk_goc` varchar(128),IN `quyen_han` tinyint,IN `trang_thai` tinyint, IN `cau_noi` varchar(1024))
+BEGIN
+	#Routine body goes here...
+	INSERT INTO nguoi_dung(URL_DAI_DIEN, HO_TEN, NGAY_SINH, GIOI_TINH, DIA_CHI, EMAIL, SDT, TAI_KHOAN, MAT_KHAU, MAT_KHAU_GOC, QUYEN_HAN, TRANG_THAI, CAU_NOI)
+			VALUES (COALESCE(`url_dai_dien`,'./uploads/images/avatar/default.png'),
+					COALESCE(`ho_ten`,'Không tên'),
+					`ngay_sinh`,
+					`gioi_tinh`,
+					`dia_chi`,
+					`email`,
+					`sdt`,
+					`tk`,
+					`mk`,
+					`mk_goc`,
+					COALESCE(`quyen_han`,1),
+					`trang_thai`,
+					`cau_noi`);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `user_login`(IN `username` varchar(128),IN `password` varchar(128))
@@ -78,20 +97,23 @@ BEGIN
 		0 , 8;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `user_update`(IN `id` int,IN `url_dai_dien` varchar(200),IN `ho_ten` varchar(200),IN `gioi_tinh` tinyint,IN `dia_chi` varchar(200),IN `email` varchar(256),IN `sdt` char(20),IN `tk` varchar(128),IN `mk` varchar(128),IN `quyen_han` tinyint,IN `trang_thai` tinyint)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_update`(IN `id` int,IN `url_dai_dien` varchar(200),IN `ngay_sinh` date, IN `ho_ten` varchar(200),IN `gioi_tinh` tinyint,IN `dia_chi` varchar(200),IN `email` varchar(256),IN `sdt` char(20),IN `tk` varchar(128),IN `mk` varchar(128),IN `mk_goc` varchar(128),IN `quyen_han` tinyint,IN `trang_thai` tinyint, IN `cau_noi` varchar(1024))
 BEGIN
 	#Routine body goes here...
 	UPDATE nguoi_dung 
 			SET nguoi_dung.URL_DAI_DIEN = COALESCE(`url_dai_dien`,nguoi_dung.URL_DAI_DIEN),
 					nguoi_dung.HO_TEN = COALESCE(`ho_ten`,nguoi_dung.HO_TEN),
+					nguoi_dung.NGAY_SINH = COALESCE(`ngay_sinh`,nguoi_dung.NGAY_SINH),
 					nguoi_dung.GIOI_TINH = COALESCE(`gioi_tinh`,nguoi_dung.GIOI_TINH),
 					nguoi_dung.DIA_CHI = COALESCE(`dia_chi`,nguoi_dung.DIA_CHI),
 					nguoi_dung.EMAIL = COALESCE(`email`,nguoi_dung.EMAIL),
 					nguoi_dung.SDT = COALESCE(`sdt`,nguoi_dung.SDT),
 					nguoi_dung.TAI_KHOAN = COALESCE(`tk`,nguoi_dung.TAI_KHOAN),
 					nguoi_dung.MAT_KHAU = COALESCE(`mk`,nguoi_dung.MAT_KHAU),
+					nguoi_dung.MAT_KHAU_GOC = COALESCE(`mk_goc`,nguoi_dung.MAT_KHAU_GOC),
 					nguoi_dung.QUYEN_HAN = COALESCE(`quyen_han`,nguoi_dung.QUYEN_HAN),
-					nguoi_dung.TRANG_THAI = COALESCE(`trang_thai`,nguoi_dung.TRANG_THAI)
+					nguoi_dung.TRANG_THAI = COALESCE(`trang_thai`,nguoi_dung.TRANG_THAI),
+					nguoi_dung.CAU_NOI = COALESCE(`cau_noi`,nguoi_dung.CAU_NOI)
 			WHERE nguoi_dung.ID = `id`;
 END$$
 
@@ -134,16 +156,20 @@ BEGIN
 	return ts_van_de;
 END$$
 
-CREATE DEFINER=`root`@`localhost` FUNCTION `user_count`() RETURNS int(11)
+CREATE DEFINER=`root`@`localhost` FUNCTION `user_count`(`key` varchar(128)) RETURNS int(11)
 BEGIN
 	DECLARE ts_nguoi_dung int; 	
 	SET ts_nguoi_dung = 0;
+
 	SELECT 
 		COUNT(*) INTO ts_nguoi_dung
 	FROM
-		nguoi_dung;
+		nguoi_dung
+	WHERE
+		(nguoi_dung.TAI_KHOAN LIKE CONCAT('%',`key` ,'%') OR `key` IS NULL) OR
+		(nguoi_dung.HO_TEN LIKE CONCAT('%',`key` ,'%') OR `key` IS NULL);
 
-	return ts_nguoi_dung;
+	RETURN ts_nguoi_dung;
 END$$
 
 DELIMITER ;
@@ -312,43 +338,44 @@ INSERT INTO `linh_vuc` (`ID`, `TEN_LINH_VUC`, `MO_TA_LINH_VUC`, `URL_THUMNAIL`, 
 
 CREATE TABLE IF NOT EXISTS `nguoi_dung` (
   `ID` int(11) NOT NULL,
-  `URL_DAI_DIEN` varchar(200) DEFAULT 'default.png',
+  `URL_DAI_DIEN` varchar(200) DEFAULT './uploads/images/avatar/default.png',
   `HO_TEN` varchar(200) NOT NULL DEFAULT 'Ẩn danh',
+  `NGAY_SINH` date NOT NULL DEFAULT '1992-01-01',
   `GIOI_TINH` tinyint(4) NOT NULL DEFAULT '3',
-  `DIA_CHI` varchar(200) NOT NULL DEFAULT 'Không địa chỉ',
   `EMAIL` varchar(256) NOT NULL DEFAULT 'Không email',
+  `DIA_CHI` varchar(200) NOT NULL DEFAULT 'Không địa chỉ',
   `SDT` char(20) NOT NULL DEFAULT 'Không sđt',
   `TAI_KHOAN` varchar(128) NOT NULL,
   `MAT_KHAU` varchar(128) NOT NULL,
+  `MAT_KHAU_GOC` varchar(128) NOT NULL,
   `QUYEN_HAN` tinyint(4) NOT NULL DEFAULT '1',
   `TRANG_THAI` tinyint(4) NOT NULL DEFAULT '3',
   `THOI_DIEM_TAO` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `NGAY_SINH` date NOT NULL DEFAULT '1992-01-01',
-  `CAU_NOI` varchar(1024) NOT NULL DEFAULT 'Cùng nhau chia sẽ, lâu lâu mới hiểu'
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+  `CAU_NOI` varchar(1024) NOT NULL DEFAULT ''
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `nguoi_dung`
 --
 
-INSERT INTO `nguoi_dung` (`ID`, `URL_DAI_DIEN`, `HO_TEN`, `GIOI_TINH`, `DIA_CHI`, `EMAIL`, `SDT`, `TAI_KHOAN`, `MAT_KHAU`, `QUYEN_HAN`, `TRANG_THAI`, `THOI_DIEM_TAO`, `NGAY_SINH`, `CAU_NOI`) VALUES
-(1, './uploads/images/avatar/ngogiangthanh.jpg', 'Ngô Giang Thanh', 1, '132/28, đường 3 tháng 2, p. Hưng Lợi, q. Ninh Kiều, tp. Cần Thơ', 'thanhthanh1516@gmail.com', '0946344233', 'ngogiangthanh', '35705de1978a792d689f6725d5926225', 2, 1, '2017-03-01 19:22:30', '1992-01-01', 'To make something special, you just have to believe it''s speical'),
-(3, './uploads/images/avatar/default.png', 'anonymous1', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous1', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-02 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(4, './uploads/images/avatar/default.png', 'anonymous2', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous2', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-03 09:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(5, './uploads/images/avatar/default.png', 'anonymous3', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous3', '35705de1978a792d689f6725d5926225', 1, 2, '2017-03-03 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(6, './uploads/images/avatar/default.png', 'anonymous4', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous4', '35705de1978a792d689f6725d5926225', 1, 2, '2017-03-04 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(7, './uploads/images/avatar/default.png', 'anonymous5', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous5', '35705de1978a792d689f6725d5926225', 1, 3, '2017-03-05 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(8, './uploads/images/avatar/default.png', 'anonymous6', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous6', '35705de1978a792d689f6725d5926225', 1, 3, '2017-03-06 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(9, './uploads/images/avatar/default.png', 'anonymous7', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous7', '35705de1978a792d689f6725d5926225', 1, 2, '2017-03-07 09:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(10, './uploads/images/avatar/default.png', 'anonymous8', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous8', '35705de1978a792d689f6725d5926225', 1, 3, '2017-03-07 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(11, './uploads/images/avatar/anonymous09.jpg', 'anonymous9', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous9', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-08 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(12, './uploads/images/avatar/anonymous10.jpg', 'anonymous10', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous10', '35705de1978a792d689f6725d5926225', 1, 3, '2017-03-10 17:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(13, './uploads/images/avatar/anonymous11.jpg', 'anonymous11', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous11', '35705de1978a792d689f6725d5926225', 1, 3, '2017-03-10 18:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(14, './uploads/images/avatar/anonymous12.jpg', 'anonymous12', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous12', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-10 19:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(15, './uploads/images/avatar/anonymous13.jpg', 'anonymous13', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous13', '35705de1978a792d689f6725d5926225', 1, 3, '2017-03-10 19:42:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(16, './uploads/images/avatar/anonymous14.jpg', 'anonymous14', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous14', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-25 21:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(17, './uploads/images/avatar/anonymous15.jpg', 'anonymous15', 3, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous15', '35705de1978a792d689f6725d5926225', 1, 1, '2017-03-25 08:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(18, './uploads/images/avatar/anonymous16.jpg', 'NGUYỄN THANH QUY', 1, 'Không địa chỉ', 'Không email', 'Không sđt', 'anonymous16', '35705de1978a792d689f6725d5926225', 1, 3, '2017-03-26 09:22:35', '1992-01-01', 'Cùng nhau chia sẽ, lâu lâu mới hiểu');
+INSERT INTO `nguoi_dung` (`ID`, `URL_DAI_DIEN`, `HO_TEN`, `NGAY_SINH`, `GIOI_TINH`, `EMAIL`, `DIA_CHI`, `SDT`, `TAI_KHOAN`, `MAT_KHAU`, `MAT_KHAU_GOC`, `QUYEN_HAN`, `TRANG_THAI`, `THOI_DIEM_TAO`, `CAU_NOI`) VALUES
+(1, './uploads/images/avatar/ngogiangthanh.jpg', 'Ngô Giang Thanh', '1992-02-08', 1, 'thanhthanh1516@gmail.com', '132/28, đường 3 tháng 2, p. Hưng Lợi, q. Ninh Kiều, tp. Cần Thơ', '0946344233', 'ngogiangthanh', '3709a5fc9f1dc01159794fe0f31d8d33', '16753491516', 2, 1, '2017-03-01 19:22:30', 'Người không vì mình trời chu đất diệt'),
+(3, './uploads/images/avatar/anonymous1.jpg', 'anonymous1', '1992-01-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous1', '35705de1978a792d689f6725d5926225', '1675349', 1, 1, '2017-03-02 19:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(4, './uploads/images/avatar/anonymous2.jpg', 'anonymous2', '1992-02-11', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous2', '35705de1978a792d689f6725d5926225', '1675349', 1, 1, '2017-03-03 09:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(5, './uploads/images/avatar/default.png', 'anonymous3', '1992-03-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous3', '35705de1978a792d689f6725d5926225', '1675349', 1, 2, '2017-03-03 19:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(6, './uploads/images/avatar/default.png', 'anonymous4', '1992-04-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous4', '35705de1978a792d689f6725d5926225', '1675349', 1, 2, '2017-03-04 19:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(7, './uploads/images/avatar/default.png', 'anonymous5', '1992-05-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous5', '35705de1978a792d689f6725d5926225', '1675349', 1, 3, '2017-03-05 19:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(8, './uploads/images/avatar/anonymous6.jpg', 'anonymous6', '1992-01-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous6', '35705de1978a792d689f6725d5926225', '1675349', 1, 3, '2017-03-06 19:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(9, './uploads/images/avatar/anonymous7.jpg', 'anonymous7', '1992-01-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous7', '35705de1978a792d689f6725d5926225', '1675349', 1, 2, '2017-03-07 09:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(10, './uploads/images/avatar/anonymous8.jpg', 'anonymous8', '1992-01-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous8', '35705de1978a792d689f6725d5926225', '1675349', 1, 3, '2017-03-07 19:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(11, './uploads/images/avatar/anonymous09.jpg', 'anonymous9', '1992-01-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous9', '35705de1978a792d689f6725d5926225', '1675349', 1, 1, '2017-03-08 19:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(12, './uploads/images/avatar/anonymous10.jpg', 'anonymous10', '1992-01-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous10', '35705de1978a792d689f6725d5926225', '1675349', 1, 3, '2017-03-10 17:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(13, './uploads/images/avatar/anonymous11.jpg', 'anonymous11', '1992-01-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous11', '35705de1978a792d689f6725d5926225', '1675349', 1, 3, '2017-03-10 18:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(14, './uploads/images/avatar/anonymous12.jpg', 'anonymous12', '1992-01-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous12', '35705de1978a792d689f6725d5926225', '1675349', 1, 1, '2017-03-10 19:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(15, './uploads/images/avatar/anonymous13.jpg', 'anonymous13', '1992-01-03', 2, 'anonymous13@gmail.com', 'Không địa chỉ', 'Không sđt', 'anonymous13', '35705de1978a792d689f6725d5926225', '1675349', 1, 2, '2017-03-10 19:42:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(17, './uploads/images/avatar/anonymous15.jpg', 'anonymous15', '1992-01-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous15', '35705de1978a792d689f6725d5926225', '1675349', 1, 1, '2017-03-25 08:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(18, './uploads/images/avatar/anonymous16.jpg', 'NGUYỄN THANH QUY', '1992-01-01', 1, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous16', '35705de1978a792d689f6725d5926225', '1675349', 1, 3, '2017-03-26 09:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(23, './uploads/images/avatar/dsfdsf.jpg', 'gsdf', '2017-03-03', 1, 'thanhthanh1516@gmail.com', 'fdsfds', 'fsdfdsfdsfsd', 'dsfdsf', 'f35e1aa017bc04bd1fb020a96ef543ba', 'oxnwxw29', 1, 1, '2017-03-28 17:03:10', 'fdsfds');
 
 -- --------------------------------------------------------
 
@@ -679,7 +706,7 @@ ALTER TABLE `linh_vuc`
 -- AUTO_INCREMENT for table `nguoi_dung`
 --
 ALTER TABLE `nguoi_dung`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=19;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=24;
 --
 -- AUTO_INCREMENT for table `phan_hoi`
 --
