@@ -6,7 +6,7 @@
     <div class="box-body">
         <div class="col-sm-3 col-md-6 col-lg-3 pull-left">
             <div class="input-group">
-                    <a href="admin.php?controller=users&action=add" class="form-control btn btn-primary btn-primary"><span class="glyphicon glyphicon-plus-sign" title="Thêm thành viên"></span> Thêm thành viên</a>  
+                <a href="admin.php?controller=users&action=add" class="form-control btn btn-primary btn-primary"><span class="glyphicon glyphicon-plus-sign" title="Thêm thành viên"></span> Thêm thành viên</a>  
             </div>
         </div>
         <div class="col-sm-3 col-md-6 box-header clearfix"></div>
@@ -47,18 +47,18 @@
                 foreach ($userShorts as $userShort) {
                     ?>
                     <tr>
-                        <td><?= $userShort['ID'] ?></td>
-                        <td><?= html_entity_decode($userShort['HO_TEN']) ?></td>
-                        <td><?= html_entity_decode($userShort['TAI_KHOAN']) ?></td>
+                        <td><?= $userShort->ID ?></td>
+                        <td><?= html_entity_decode($userShort->HO_TEN) ?></td>
+                        <td><?= html_entity_decode($userShort->TAI_KHOAN) ?></td>
                         <td>
-                            <?= html_entity_decode(date_format(date_create($userShort['THOI_DIEM_TAO']), "h:i A | d/m/Y")) ?>
+                            <?= html_entity_decode(date_format(date_create($userShort->THOI_DIEM_TAO), "h:i A | d/m/Y")) ?>
                         </td>
                         <td>
-                            <?= html_entity_decode($status[$userShort['TRANG_THAI']]) ?>
+                            <?= html_entity_decode($status[$userShort->TRANG_THAI]) ?>
                         </td>
                         <td class=" text-center">
-                            <a href="#" class="btn btn-xs btn-success" data-toggle="modal" data-target="#Show-User" onclick="loadEditForm(getARow('<?= $userShort['ID'] ?>'))"><span class="glyphicon glyphicon-edit"></span> </a>
-                            <a href="#" onclick='$("#delete-confirm-btn").attr("href", "admin.php?controller=users&action=delete&tk=<?= $userShort['TAI_KHOAN'] ?>&id=<?= $userShort['ID'] ?>")' data-toggle="modal" data-target="#delete-confirm" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove-sign"></span> </a>
+                            <a href="#" class="btn btn-xs btn-success" data-toggle="modal" data-target="#Show-User" onclick="loadEditForm(getARow('<?= $userShort->ID ?>'))"><span class="glyphicon glyphicon-edit"></span> </a>
+                            <a href="#" onclick='$("#delete-confirm-btn").attr("href", "admin.php?controller=users&action=delete&tk=<?= $userShort->TAI_KHOAN ?>&id=<?= $userShort->ID ?>")' data-toggle="modal" data-target="#delete-confirm" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove-sign"></span> </a>
                         </td>
 
                     </tr>
@@ -99,21 +99,21 @@
                 </div>
                 <!-- Password input-->
                 <div class="row">
-                        <div class="col-sm-12">
-                            
-                            <form id="uploadimage" action="" method="post" enctype="multipart/form-data">
-                                <div class="row">
-                                    <label for="inputAvatar" class="col-sm-4 control-label text-center">
-                                        <input id="avatar-2" name="file" type="file" class="form-control file-loading profile-user-img img-responsive img-circle" title="Ảnh đại diện thành viên" alt="User profile picture" accept="image/jpg, image/jpeg, image/png" />
-                                    </label>
-                                    <div class="col-sm-8 form-group">
-                                        <span class="help-block text-black"><i class="glyphicon glyphicon-time" title="Thời điểm tạo"></i>&nbsp;Thời điểm tạo: <label id="thoi-diem-tao"></label></span>  
-                                        <span class="help-block text-black"><i class="glyphicon glyphicon-user" title="Nhóm quyền thành viên"></i>&nbsp;Nhóm quyền: <label id="nhom-quyen"></label></span>  
-                                        <span class="help-block text-black"><i class="glyphicon glyphicon-picture" title="Ảnh đại diện"></i>&nbsp;<label id="url-dai-dien"></label></span>  
-                                    </div>
+                    <div class="col-sm-12">
+
+                        <form id="uploadimage" action="" method="post" enctype="multipart/form-data">
+                            <div class="row">
+                                <label for="inputAvatar" class="col-sm-4 control-label text-center">
+                                    <input id="avatar-2" name="file" type="file" class="form-control file-loading profile-user-img img-responsive img-circle" title="Ảnh đại diện thành viên" alt="User profile picture" accept="image/jpg, image/jpeg, image/png" />
+                                </label>
+                                <div class="col-sm-8 form-group">
+                                    <span class="help-block text-black"><i class="glyphicon glyphicon-time" title="Thời điểm tạo"></i>&nbsp;Thời điểm tạo: <label id="thoi-diem-tao"></label></span>  
+                                    <span class="help-block text-black"><i class="glyphicon glyphicon-user" title="Nhóm quyền thành viên"></i>&nbsp;Nhóm quyền: <label id="nhom-quyen"></label></span>  
+                                    <span class="help-block text-black"><i class="glyphicon glyphicon-picture" title="Ảnh đại diện"></i>&nbsp;<label id="url-dai-dien"></label></span>  
                                 </div>
-                            </form>
-                            <form action="admin.php?controller=users&action=update" method="post">
+                            </div>
+                        </form>
+                        <form action="admin.php?controller=users&action=update" method="post">
                             <div class="row">
                                 <div class="col-sm-6 form-group">
                                     <label>Họ tên:</label>
@@ -193,8 +193,8 @@
                                     </div>
                                 </div>
                             </div>
-                                
-                                
+
+
                             <div class="row">
                                 <div class="col-sm-6 form-group">
                                     <label>Địa chỉ</label>
@@ -207,16 +207,16 @@
                                 </div>	
                             </div>
 
-                        <div class="row pull-right">
-                            <div class="col-sm-12 ">
-                                <button type="submit" class="btn btn-success">Lưu</button>		
-                                <button type="button" class="btn btn-warning" onclick="loadEditForm(getARow($('#id-user').val()))">Làm lại</button>	
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>	
+                            <div class="row pull-right">
+                                <div class="col-sm-12 ">
+                                    <button type="submit" class="btn btn-success">Lưu</button>		
+                                    <button type="button" class="btn btn-warning" onclick="loadEditForm(getARow($('#id-user').val()))">Làm lại</button>	
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>	
+                                </div>
                             </div>
-                        </div>
-                            
-                    </form> 		
-                        </div>
+
+                        </form> 		
+                    </div>
                 </div>
 
             </div>
@@ -252,27 +252,26 @@
 $js_array = json_encode($userShorts);
 echo "var userShorts = " . $js_array . ";\n";
 ?>
-    var roles = ["","Thành viên", "Quản lý"];
-    
-    function showPassword(){
+    var roles = ["", "Thành viên", "Quản lý"];
+
+    function showPassword() {
         var str = $("#mat-khau").attr("type");
-        if(str === "password"){
-            $("#mat-khau").prop("type","text");
+        if (str === "password") {
+            $("#mat-khau").prop("type", "text");
             $("#btn-show-password").empty();
             $("#btn-show-password").append("<i class='ionicons ion-android-unlock'></i>");
-        }
-        else if(str === "text"){
-            $("#mat-khau").prop("type","password");
+        } else if (str === "text") {
+            $("#mat-khau").prop("type", "password");
             $("#btn-show-password").empty();
             $("#btn-show-password").append("<i class='ionicons ion-android-lock'></i>");
         }
     }
-    
-    function loadEditForm(dataRow){
-       
+
+    function loadEditForm(dataRow) {
+
         $("#id-url-avatar-temp").val(dataRow['URL_DAI_DIEN']);
         $("#id-user").val(dataRow['ID']);
-        $("#avatar-id").attr("src",dataRow['URL_DAI_DIEN']);
+        $("#avatar-id").attr("src", dataRow['URL_DAI_DIEN']);
         $("#thoi-diem-tao").html($.datepicker.formatDate('dd/mm/yy', new Date(dataRow['THOI_DIEM_TAO'])));
         $("#url-dai-dien").html(dataRow['URL_DAI_DIEN']);
         $("#nhom-quyen").html(roles[parseInt(dataRow['QUYEN_HAN'])]);
@@ -286,7 +285,7 @@ echo "var userShorts = " . $js_array . ";\n";
         $("#trang-thai-id").val(dataRow['TRANG_THAI']).change();
         $("#cau-noi-id").val(dataRow['CAU_NOI']);
         $("#dia-chi-id").val(dataRow['DIA_CHI']);
-        $("#button-id").prop("disabled",true);
+        $("#button-id").prop("disabled", true);
     }
     function getARow(id) {
         var dt_size = userShorts.length;

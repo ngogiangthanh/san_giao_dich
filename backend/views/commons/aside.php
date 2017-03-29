@@ -88,10 +88,10 @@
                 </a>
                 <ul class="treeview-menu">
                     <li><a href="admin.php?controller=systems&action=about-us"><i class="fa fa-info-circle"></i>&nbsp;Thông tin giới thiệu</a></li>
-                    <li><a href="admin.php?controller=users&action=contact-us"><i class="fa fa-phone"></i>&nbsp;Thông tin liên hệ</a></li>
-                    <li><a href="admin.php?controller=users&action=logo"><i class="fa fa-send"></i>&nbsp;Thông tin logo - banner</a></li>
-                    <li><a href="admin.php?controller=users&action=category"><i class="fa fa-info"></i>&nbsp;Menu chuyên mục ý tưởng</a></li>
-                    <li><a href="admin.php?controller=users&action=configuration"><i class="fa fa-windows"></i>&nbsp;Cấu hình hệ thống</a></li>
+                    <li><a href="admin.php?controller=systems&action=contact-us"><i class="fa fa-phone"></i>&nbsp;Thông tin liên hệ</a></li>
+                    <li><a href="admin.php?controller=systems&action=logo"><i class="fa fa-send"></i>&nbsp;Thông tin logo - banner</a></li>
+                    <li><a href="admin.php?controller=systems&action=category"><i class="fa fa-info"></i>&nbsp;Menu chuyên mục ý tưởng</a></li>
+                    <li><a href="admin.php?controller=systems&action=configuration"><i class="fa fa-windows"></i>&nbsp;Cấu hình hệ thống</a></li>
                 </ul>
             </li>
         </ul>

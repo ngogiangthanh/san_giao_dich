@@ -28,7 +28,7 @@ function userCount($conn, $keys = null) {
 function userSelectLastest($conn) {
     $stmt = $conn->prepare("call user_select_lastest();");
     $stmt->execute();
-    $result = $stmt->fetchAll();
+    $result = $stmt->fetchAll(PDO::FETCH_OBJ);
 
     $stmt->closeCursor();
 
@@ -42,7 +42,9 @@ function userSelect($keys, $offset, $litmit, $conn) {
     $stmt->bindParam(':limit', $litmit, PDO::PARAM_INT);
 
     $stmt->execute();
-    $result = $stmt->fetchAll();
+    $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+
+
 
     $stmt->closeCursor();
 
@@ -106,7 +108,7 @@ function userInsert($conn, $config) {
         "quyen_han" => null,
         "trang_thai" => null,
         "cau_noi" => null);
-    
+
     $options = array_merge($options, $config);
     $stmt = $conn->prepare("call user_insert(:url_dai_dien,:ngay_sinh, :ho_ten ,:gioi_tinh ,:dia_chi ,:email ,:sdt ,:tk ,:mk, :mk_goc ,:quyen_han ,:trang_thai,:cau_noi);");
 

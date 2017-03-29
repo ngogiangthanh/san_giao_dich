@@ -8,12 +8,12 @@
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <h1>
-                    Bảng điều khiển 
-                    <small>v1.0</small>
+                   <i class="fa fa-dashboard">&nbsp;</i>Bảng điều khiển 
+                    <small><?=ADMINISTRATOR_VERSION?></small>
                 </h1>
                 <ol class="breadcrumb">
                     <li><a href="admin.php"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
-                    <li class="active">Trang quản lý thông tin hệ thống</li>
+                    <li class="active">Quản lý hệ thống</li>
                 </ol>
             </section>
 
@@ -21,11 +21,9 @@
             <section class="content">
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12 pull-right">
-                        <div class="row">
-                            <!-- BEGIN CONTENT -->
-                            <?php require('backend/views/systems/list.php'); ?>
-                            <!-- END CONTENT -->
-                        </div>
+                        <!-- BEGIN CONTENT -->
+                        <?php require('backend/views/systems/list.php'); ?>
+                        <!-- END CONTENT -->
                     </div>
 
                 </div>

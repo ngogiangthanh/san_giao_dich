@@ -9,36 +9,26 @@ ErrorDocument 500 "Internal Server Error<br/><a href='./'>Back to Homepage</a>"
 # Disable list directory
 Options All -Indexes 
 #Set only use route.php
-
 #DirectoryIndex index.html index.htm default.htm index.php index.php3 index.phtml index.php5 index.shtml mwindex.phtml
 DirectoryIndex route.php
 <files .htaccess> 
 order allow,deny 
 deny from all 
 </files> 
-<IfModule mod_php5.c>
-    #Session timeout
-    #php_value session.cookie_lifetime 3600
-    #php_value session.gc_maxlifetime 3600
-</IfModule>
 <Files *.php>
     Order Deny,Allow
     Deny from all
     Allow from 127.0.0.1
 </Files>
 
-<Files route.php>
+<Files ~ "^(route|admin)\.php$">
     Order Allow,Deny
     Allow from all
 </Files>
-<Files admin.php>
+<FilesMatch  "^(imgbrowser|imgupload|imgdelete|logout|create|login|pluginconfig|function|captcha)\.php$">
     Order Allow,Deny
     Allow from all
-</Files>
-<Files captcha.php>
-    Order Allow,Deny
-    Allow from all
-</Files>
+</FilesMatch>
 #order deny,allow
 #deny from all
 #allow from 42.117.255.68

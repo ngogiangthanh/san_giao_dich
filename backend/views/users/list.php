@@ -9,8 +9,8 @@
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <h1>
-                    Bảng điều khiển 
-                    <small>v1.0</small>
+                   <i class="fa fa-dashboard">&nbsp;</i>Bảng điều khiển 
+                    <small><?=ADMINISTRATOR_VERSION?></small>
                 </h1>
                 <ol class="breadcrumb">
                     <li><a href="admin.php"><i class="fa fa-dashboard"></i> Trang chủ</a></li>

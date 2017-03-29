@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 28, 2017 at 12:11 PM
+-- Generation Time: Mar 29, 2017 at 12:15 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -24,6 +24,48 @@ DELIMITER $$
 --
 -- Procedures
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `category_select`()
+BEGIN
+	SELECT
+	*
+	FROM
+	linh_vuc
+	ORDER BY
+		linh_vuc.THU_TU asc;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `category_update`(IN `id` int, IN `ten_linh_vuc` varchar(200), IN `mo_ta` text, IN `url_thumb` varchar(100), IN `url_menu` varchar(20), IN `thu_tu` tinyint(4), IN `hien_thi` bit)
+BEGIN
+	#Routine body goes here...
+	UPDATE linh_vuc 
+			SET linh_vuc.TEN_LINH_VUC = COALESCE(`ten_linh_vuc` ,linh_vuc.TEN_LINH_VUC),
+					linh_vuc.MO_TA_LINH_VUC = COALESCE(`mo_ta` ,linh_vuc.MO_TA_LINH_VUC),
+					linh_vuc.URL_THUMNAIL = COALESCE(`url_thumb` ,linh_vuc.URL_THUMNAIL),
+					linh_vuc.URL_MENU = COALESCE(`url_menu` ,linh_vuc.URL_MENU),
+					linh_vuc.THU_TU = COALESCE(`thu_tu` ,linh_vuc.THU_TU),
+					linh_vuc.HIEN_THI = COALESCE(`hien_thi` ,linh_vuc.HIEN_THI)
+			WHERE linh_vuc.ID = `id`;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `info_select`(IN `loai_tt` tinyint(4))
+BEGIN
+	SELECT
+	*
+	FROM
+	thong_tin_to_chuc
+	WHERE
+		(thong_tin_to_chuc.LOAI_THONG_TIN = `loai_tt` OR `loai_tt` IS NULL);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `info_update`(IN `id` int, IN `noi_dung` text, IN `id_user` int)
+BEGIN
+	#Routine body goes here...
+	UPDATE thong_tin_to_chuc 
+			SET thong_tin_to_chuc.THONG_TIN_TO_CHUC = `noi_dung`,
+					thong_tin_to_chuc.ID_NGUOI_DUNG = `id_user`
+			WHERE thong_tin_to_chuc.ID = `id`;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `user_add`(IN `url_dai_dien` varchar(200),IN `ho_ten` varchar(200),IN `gioi_tinh` tinyint,IN `dia_chi` varchar(200),IN `email` varchar(256),IN `sdt` char(20),IN `tk` varchar(128),IN `mk` varchar(128),IN `quyen_han` tinyint,IN `trang_thai` tinyint)
 BEGIN
 	#Routine body goes here...
@@ -225,17 +267,6 @@ INSERT INTO `bau_chon_tra_loi` (`ID`, `BAU_CHON`, `ID_NGUOI_DUNG`, `ID_TRA_LOI`)
 -- --------------------------------------------------------
 
 --
--- Table structure for table `code`
---
-
-CREATE TABLE IF NOT EXISTS `code` (
-  `ID` int(10) unsigned NOT NULL,
-  `MA_CODE` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `ds_theo_doi`
 --
 
@@ -372,7 +403,7 @@ INSERT INTO `nguoi_dung` (`ID`, `URL_DAI_DIEN`, `HO_TEN`, `NGAY_SINH`, `GIOI_TIN
 (12, './uploads/images/avatar/anonymous10.jpg', 'anonymous10', '1992-01-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous10', '35705de1978a792d689f6725d5926225', '1675349', 1, 3, '2017-03-10 17:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
 (13, './uploads/images/avatar/anonymous11.jpg', 'anonymous11', '1992-01-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous11', '35705de1978a792d689f6725d5926225', '1675349', 1, 3, '2017-03-10 18:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
 (14, './uploads/images/avatar/anonymous12.jpg', 'anonymous12', '1992-01-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous12', '35705de1978a792d689f6725d5926225', '1675349', 1, 1, '2017-03-10 19:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
-(15, './uploads/images/avatar/anonymous13.jpg', 'anonymous13', '1992-01-03', 2, 'anonymous13@gmail.com', 'Không địa chỉ', 'Không sđt', 'anonymous13', '35705de1978a792d689f6725d5926225', '1675349', 1, 2, '2017-03-10 19:42:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(15, './uploads/images/avatar/anonymous13.jpg', 'anonymous13', '1992-01-03', 2, 'anonymous13@gmail.com', 'Không địa chỉ', 'Không sđt', 'anonymous13', '35705de1978a792d689f6725d5926225', '1675349', 1, 1, '2017-03-10 19:42:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
 (17, './uploads/images/avatar/anonymous15.jpg', 'anonymous15', '1992-01-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous15', '35705de1978a792d689f6725d5926225', '1675349', 1, 1, '2017-03-25 08:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
 (18, './uploads/images/avatar/anonymous16.jpg', 'NGUYỄN THANH QUY', '1992-01-01', 1, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous16', '35705de1978a792d689f6725d5926225', '1675349', 1, 3, '2017-03-26 09:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
 (23, './uploads/images/avatar/dsfdsf.jpg', 'gsdf', '2017-03-03', 1, 'thanhthanh1516@gmail.com', 'fdsfds', 'fsdfdsfdsfsd', 'dsfdsf', 'f35e1aa017bc04bd1fb020a96ef543ba', 'oxnwxw29', 1, 1, '2017-03-28 17:03:10', 'fdsfds');
@@ -444,18 +475,20 @@ CREATE TABLE IF NOT EXISTS `thong_tin_to_chuc` (
   `LOAI_THONG_TIN` tinyint(4) NOT NULL,
   `THOI_DIEM_CAP_NHAT` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `ID_NGUOI_DUNG` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `thong_tin_to_chuc`
 --
 
 INSERT INTO `thong_tin_to_chuc` (`ID`, `THONG_TIN_TO_CHUC`, `LOAI_THONG_TIN`, `THOI_DIEM_CAP_NHAT`, `ID_NGUOI_DUNG`) VALUES
-(1, 'Thông tin giới thiệu hiển thị trên chuyên mục giới thiệu của website', 1, '2017-03-24 02:25:05', 1),
-(2, 'E-Shopper Inc.\r\n935 W. Webster Ave New Streets Chicago, IL 60614, NY\r\nNewyork USA\r\nMobile: +2346 17 38 93\r\nFax: 1-714-252-0026\r\nEmail: info@e-shopper.com', 2, '2017-03-24 02:25:58', 1),
-(3, 'public/images/logo.png', 3, '2017-03-24 02:26:29', 1),
-(4, 'Mẫu tin về cuộc thi 1', 4, '2017-03-24 02:27:02', 1),
-(5, 'Mẫu tin về cuộc thi 2', 4, '2017-03-24 02:27:10', 1);
+(1, '<h1>Tìm thấy nhiều vật dụng của bé gái người Việt bị sát hại ở Nhật</h1>\r\n\r\n<p>Cặp sách và một số vật dụng khác mà bé Lê Thị Nhật Linh mang theo vào ngày bị bắt cóc đã được tìm thấy ven sông Tone thuộc tỉnh Ibaraki hôm 28/3.</p>\r\n\r\n<p>Báo <em>Mainichi </em>cho biết ba của bé Linh đã xác nhận đây chính là chiếc cặp của con gái anh. Sông Tone thuộc thành phố Bando, tỉnh Ibaraki. Nơi này cách điểm phát hiện thi thể bé Linh ở con kênh tại Abiko, tỉnh Chiba, khoảng 10 km về hướng tây bắc.</p>\r\n\r\n<table align="center">\r\n	<tbody>\r\n		<tr>\r\n			<td><img alt="Tim thay nhieu vat dung cua be gai nguoi Viet bi sat hai o Nhat hinh anh 1" src="http://znews-photo.d.za.zdn.vn/w660/Uploaded/zugtwi/2017_03_29/nhat1_mcww.jpg" style="height:521px; width:1024px" /></td>\r\n		</tr>\r\n		<tr>\r\n			<td>Cảnh sát Nhật Bản tại hiện trường tìm thấy thi thể bé Linh. Ảnh: <em>ANN</em>.</td>\r\n		</tr>\r\n	</tbody>\r\n</table>\r\n\r\n<p>Bên cạnh đó, tại bãi cỏ cách điểm tìm thấy cặp của bé Linh khoảng 500 m, cảnh sát cũng phát hiện một bộ quần áo bé gái giống với trang phục mà nạn nhân đã mặc đến trường trong ngày cô bé bị bắt cóc. Cảnh sát đang xác minh liệu bộ đồ này có phải chính là của bé Linh hay không, cũng như khả năng hung thủ đang cố tình phi tang bằng chứng liên quan đến vụ án.</p>\r\n\r\n<p>Đến nay chưa có người nào cung cấp thông tin cho cảnh sát về đối tượng khả nghi có hành động như ném quần áo hoặc vật dụng xuống sông. Trong diễn biến khác, cảnh sát Chiba cho biết có nhiều tin nhắn bí ẩn trên mạng hé mở về địa điểm phát hiện thi thể bé Linh.</p>\r\n\r\n<p>"Ai đó đã đăng tin nhắn này lên mạng vào 21h ngày 24/3 (hơn 12 tiếng sau khi bé Linh mất tích - PV), nói rằng &#39;Khi trời ấm hơn, hãy tìm kiếm ở con kênh xem có thi thể cô gái nào không&#39;", một cảnh sát kể lại với <em>Kyodo</em>.</p>\r\n\r\n<p>Một tin nhắn khác nói rõ ràng hơn: "Hãy tìm kiếm ở con kênh". Một tiếng sau, cảnh sát phát hiện thi thể bé Linh tại con kênh ở Abiko.</p>\r\n\r\n<p>Khoảng 8h40 ngày 24/3, không thấy cháu Linh đến trường, giáo viên thông báo cho gia đình. Tìm kiếm xung quanh khu vực trường không thấy cháu, bố bé gái trình báo cảnh sát Abiko, Nhật Bản. Sáng sớm 26/3, thi thể cháu bé được tìm thấy cạnh bãi cỏ bên con sông tại thành phố Abiko, tỉnh Chiba, cách nhà bé khoảng 10 km.</p>\r\n\r\n<p>Qua khám nghiệm, cảnh sát ước tính bé Linh có thể bị sát hại vào khoảng từ sáng 24/3 đến đêm 25/3. Không loại trừ khả năng em bị giết ngay sau khi bị bắt cóc, lúc đang trên đường tới trường vào thứ sáu tuần trước. Nguyên nhân gây tử vong của bé là do bị siết cổ. Cơ thể của nạn nhân có dấu hiệu bị xâm hại tình dục.</p>\r\n\r\n<p>Cái chết của bé Nhật Linh gây chấn động đối với người dân địa phương ở tỉnh Chiba và truyền thông Nhật Bản. Bộ Ngoại giao Việt Nam đã chỉ đạo đại sứ quán tại Nhật Bản khẩn trương làm việc với các cơ quan chức năng sở tại yêu cầu phía Nhật Bản xác định nguyên nhân tử vong, điều tra, truy bắt hung thủ và xét xử nghiêm theo đúng các quy định pháp luật.</p>\r\n\r\n<p><strong>Mương nước nơi tìm thấy xác bé gái Việt bị giết hại ở Nhật</strong> Thi thể bé Lê Thị Nhật Linh được tìm thấy tại một mương thoát nước cách nhà khoảng 10 km trong tình trạng không quần áo và có dấu hiệu bị xâm hại tình dục trước khi chết.</p>\r\n', 1, '2017-03-29 07:49:01', 3),
+(2, '<p>VCCI CẦN THƠ</p>\r\n\r\n<p>Điện thoại: (0710) 3 824918</p>\r\n\r\n<p>Fax: (0710) 3 824169</p>\r\n\r\n<p>Email: contact@vccimekong.com.vn</p>\r\n\r\n<p>Địa chỉ: 12 Hòa Bình, Q. Ninh Kiều, Tp Cần Thơ</p>\r\n', 3, '2017-03-29 09:11:21', 1),
+(3, 'public/images/logo.png', 4, '2017-03-29 07:48:06', 1),
+(4, 'Mẫu tin về cuộc thi 1', 6, '2017-03-29 07:47:52', 1),
+(5, 'Mẫu tin về cuộc thi 2', 6, '2017-03-29 07:47:44', 1),
+(6, 'AIzaSyDPIECBsdxF1HplLrJzEm0oB0PiMVhfGLg[]VCCI Cần Thơ', 2, '2017-03-29 09:12:57', 1),
+(7, 'public/images/logo.ico', 5, '2017-03-29 07:49:03', 3);
 
 -- --------------------------------------------------------
 
@@ -603,12 +636,6 @@ ALTER TABLE `bau_chon_tra_loi`
   ADD PRIMARY KEY (`ID`), ADD UNIQUE KEY `UNIQUE_BAU_CHON_TRA_LOI` (`ID_NGUOI_DUNG`,`ID_TRA_LOI`) USING BTREE, ADD KEY `FK_TRA_LOI_TL` (`ID_TRA_LOI`);
 
 --
--- Indexes for table `code`
---
-ALTER TABLE `code`
-  ADD PRIMARY KEY (`ID`);
-
---
 -- Indexes for table `ds_theo_doi`
 --
 ALTER TABLE `ds_theo_doi`
@@ -683,11 +710,6 @@ ALTER TABLE `bau_chon_phan_hoi`
 ALTER TABLE `bau_chon_tra_loi`
   MODIFY `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 --
--- AUTO_INCREMENT for table `code`
---
-ALTER TABLE `code`
-  MODIFY `ID` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
 -- AUTO_INCREMENT for table `ds_theo_doi`
 --
 ALTER TABLE `ds_theo_doi`
@@ -721,7 +743,7 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT for table `thong_tin_to_chuc`
 --
 ALTER TABLE `thong_tin_to_chuc`
-  MODIFY `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+  MODIFY `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `tra_loi`
 --

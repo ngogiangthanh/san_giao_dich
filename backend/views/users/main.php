@@ -20,9 +20,9 @@
                 foreach ($userLastests as $userLastest) {
                     ?>
                     <li>
-                        <img src="<?= $userLastest['URL_DAI_DIEN'] ?>" alt="User Image">
-                        <a class="users-list-name" href="#"><?= $userLastest['HO_TEN'] ?></a>
-                        <span class="users-list-date"><?= get_day_name($userLastest["THOI_DIEM_TAO"]) ?></span>
+                        <img src="<?= $userLastest->URL_DAI_DIEN ?>" alt="User Image">
+                        <a class="users-list-name" href="#"><?= $userLastest->HO_TEN ?></a>
+                        <span class="users-list-date"><?= get_day_name($userLastest->THOI_DIEM_TAO) ?></span>
                     </li>
                     <?php
                 }
@@ -67,11 +67,11 @@
                     foreach ($userShorts as $userShort) {
                         ?>
                         <tr>
-                            <td><?= $userShort['ID'] ?></td>
-                            <td><?= html_entity_decode($userShort['HO_TEN']) ?></td>
-                            <td><?= html_entity_decode($userShort['TAI_KHOAN']) ?></td>
+                            <td><?= $userShort->ID ?></td>
+                            <td><?= html_entity_decode($userShort->HO_TEN) ?></td>
+                            <td><?= html_entity_decode($userShort->TAI_KHOAN) ?></td>
                             <td>
-                                <?= html_entity_decode($status[$userShort['TRANG_THAI']]) ?>
+                                <?= html_entity_decode($status[$userShort->TRANG_THAI]) ?>
                             </td>
                         </tr>
                         <?php
