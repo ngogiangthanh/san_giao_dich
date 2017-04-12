@@ -90,7 +90,8 @@
 
                     $(".fileinput-remove").click(function () {
                         $("#avatar-id").attr("src", $("#id-url-avatar-temp").val());
-                        $("#button-id").prop("disabled", true);
+                        $("#button-id").prop("disabled", true);              
+                        $("#button-id").hide();
                     });
                     
                     $("#uploadimage").on('submit', (function (e) {
@@ -111,6 +112,8 @@
                                 if(data.result === 'true'){
                                     toastr.success(data.message);
                                     $("#url-dai-dien").html(data.url);
+                                    $("#button-id").prop("disabled", true);              
+                                    $("#button-id").hide();
                                 }
                                 else if(data.result === 'false')
                                     toastr.error(data.message);

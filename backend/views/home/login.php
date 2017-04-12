@@ -3,12 +3,10 @@
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-logo">
-            <a href="admin.php"><b>Quản trị hệ thống</b></a>
+            <a href="admin.php"><b><i class="fa fa-users"></i>&nbsp;Quản trị hệ thống</b></a>
         </div>
         <!-- /.login-logo -->
         <div class="login-box-body">
-            <p class="login-box-msg">Đăng nhập để sử dụng chức năng quản trị sàn</p>
-
             <form action="admin.php?controller=home&action=login" method="post">
                 <div class="form-group has-feedback">
                     <input type="text" name="username" class="form-control" placeholder="Nhập tài khoản">
@@ -19,11 +17,8 @@
                     <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                 </div>
                 <div class="row">
-                    <div class="col-xs-8">
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-xs-4">
-                        <button type="submit" class="btn btn-primary btn-block btn-flat">Đăng nhập</button>
+                    <div class="col-sm-12">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat"><i class="glyphicon glyphicon-log-in"></i>&nbsp;Đăng nhập</button>
                     </div>
                     <!-- /.col -->
                 </div>

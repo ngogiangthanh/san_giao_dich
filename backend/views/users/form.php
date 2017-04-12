@@ -1,6 +1,11 @@
 <div class="box">
     <div class="box-header">
-        <h3 class="box-title">Thêm thành viên</h3>
+        <h3 class="box-title"><i class="fa fa-plus"></i>&nbsp;Thêm thành viên</h3>
+        <!-- tools box -->
+        <div class="pull-right box-tools">
+            <button type="button" class="btn btn-success btn-sm" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                <i class="fa fa-minus"></i></button>
+        </div>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -102,9 +107,9 @@
 
                         <div class="row pull-right">
                             <div class="col-sm-12 ">
-                                <button type="submit" class="btn btn-success">Lưu</button>		
-                                <button type="reset" class="btn btn-warning">Làm lại</button>		
-                                <a href="admin.php?controller=users&action=list" class="btn btn-info">Danh sách</a>	
+                                <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Lưu</button>		
+                                <button type="reset" class="btn btn-warning"><i class="ionicons ion-android-sync"></i>&nbsp;Làm lại</button>		
+                                <a href="admin.php?controller=users&action=list" class="btn btn-default"><i class="fa fa-backward"></i>&nbsp;Danh sách</a>	
                             </div>
                         </div>	
                     </form> 		

@@ -1,7 +1,6 @@
 <?php require('backend/views/commons/header.php'); ?>
 <!-- bootstrap wysihtml5 - text editor -->
 <link rel="stylesheet" href="./backend/public/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
-
 <body class="hold-transition skin-blue sidebar-mini">
 
     <div class="wrapper">
@@ -17,7 +16,7 @@
                 <ol class="breadcrumb">
                     <li><a href="admin.php"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
                     <li><a href="admin.php?controller=systems"> Quản lý hệ thống</a></li>
-                    <li class="active">Trang chỉnh sửa thông tin liên hệ</li>
+                    <li class="active">Trang chỉnh sửa chuyên mục con</li>
                 </ol>
             </section>
 
@@ -26,7 +25,7 @@
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12 pull-right">
                         <!-- BEGIN CONTENT -->
-                        <?php require('backend/views/systems/contact-us-form.php'); ?>
+                        <?php require('backend/views/systems/category-form.php'); ?>
                         <!-- END CONTENT -->
                     </div>
 
@@ -49,22 +48,8 @@
         toastr.options.newestOnTop = true;
         $(document).ready(
                 function () {
-                    // Replace the <textarea id="editor1"> with a CKEditor
-                    // instance, using default configuration.
-                    CKEDITOR.plugins.add('imageuploader', {
-                        init: function (editor) {
-                            editor.config.filebrowserBrowseUrl = './libraries/imageuploader/imgbrowser.php';
-                        }
-                    });
-
-
-                    CKEDITOR.replace('editor1', {
-                        extraPlugins: 'imageuploader',
-                        height: 250
-                    });
-                    $("#check-map-btn-id").on("click",function (e) {
-                        e.preventDefault();
-                        $('#map-show-id').attr('src', "https://www.google.com/maps/embed/v1/place?key="+$("#api-key-id").val()+"&q="+$("#dia-diem-id").val());
+                    CKEDITOR.replace('mo-ta-chuyen-muc', {
+                        height: 150
                     });
                     
                 });

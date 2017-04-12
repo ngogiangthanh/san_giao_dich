@@ -139,12 +139,18 @@ function upload($field, $config = array()) {
         }
         //upload file và trả về tên file
         move_uploaded_file($file["tmp_name"], $file_path);
-        // *** 1) Initialize / load image
-        $resizeObj = new resizeimg($file_path);
-        // *** 2) Resize image (options: exact, portrait, landscape, auto, crop)
-        $resizeObj->resizeImage(300, 300, 'crop');
-        // *** 3) Save image
-        $resizeObj->saveImage($file_path_thumb, 100);
+        if ($options['allowed_exts'] != 'ico') {
+            // *** 1) Initialize / load image
+            $resizeObj = new resizeimg($file_path);
+            // *** 2) Resize image (options: exact, portrait, landscape, auto, crop)
+            $resizeObj->resizeImage(300, 300, 'crop');
+            // *** 3) Save image
+            $resizeObj->saveImage($file_path_thumb, 100);
+        }
+        else{
+            move_uploaded_file($file["tmp_name"], $file_path_thumb);
+        }
+        
         return array("img" => $file_path, "thumb" => $file_path_thumb);
     } else { //up FILE PDF
         if ($options['overwrite'] && file_exists($file_path)) {

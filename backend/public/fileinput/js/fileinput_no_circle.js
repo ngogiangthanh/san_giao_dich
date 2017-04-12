@@ -420,7 +420,7 @@
             tGeneric = '{content}\n';
             tHtml = '<div class="kv-preview-data file-preview-html" title="{caption}" ' + $h.STYLE_SETTING +
                 '>{data}</div>\n';
-            tImage = '<img src="{data}" id="avatar-id" class="profile-user-img img-responsive img-circle" title="{caption}" alt="{caption}" ' +
+            tImage = '<img src="{data}" id="logo-id" title="{caption}" alt="{caption}" ' +
                 $h.STYLE_SETTING + '>\n';
             tText = '<textarea class="kv-preview-data file-preview-text" title="{caption}" readonly ' +
                 $h.STYLE_SETTING + '>{data}</textarea>\n';
@@ -482,7 +482,7 @@
                 allowedPreviewTypes: ['image', 'html', 'text', 'video', 'audio', 'flash', 'pdf', 'object'],
                 previewTemplates: {},
                 previewSettings: {
-                    image: {width: "100px", height: "100px"},
+                    image: {width: "auto", height: "auto"},
                     html: {width: "213px", height: "160px"},
                     text: {width: "213px", height: "160px"},
                     video: {width: "213px", height: "160px"},
@@ -2259,8 +2259,8 @@
             return self._getLayoutTemplate('size').replace('{sizeText}', out);
         },
         _generatePreviewTemplate: function (cat, data, fname, ftype, previewId, isError, size, frameClass, foot, ind, templ) {
-            $("#button-id").show();
-            $("#button-id").prop("disabled",false);
+            $("#btn-logo-id").show();
+            $("#btn-logo-id").prop("disabled",false);
             var self = this, caption = self.slug(fname), prevContent, zoomContent = '',
                 config = self.previewSettings[cat] || self.defaults.previewSettings[cat],
                 w = config && config.width ? config.width : '', h = config && config.height ? config.height : '',

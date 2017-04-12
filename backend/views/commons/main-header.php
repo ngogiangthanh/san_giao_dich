@@ -263,8 +263,8 @@
                             <p>Xác nhận đăng xuất hệ thống</p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Đóng</button>
-                            <button type="button" onclick="location.href='admin.php?controller=home&action=logout'"class="btn btn-outline">Xác nhận</button>
+                            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal"><i class="fa fa-times"></i>&nbsp;Đóng</button>
+                            <button type="button" onclick="location.href='admin.php?controller=home&action=logout'"class="btn btn-outline"><i class="fa fa-check"></i>&nbsp;Xác nhận</button>
                         </div>
                     </div>
                     <!-- /.modal-content -->

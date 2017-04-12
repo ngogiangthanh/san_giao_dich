@@ -9,8 +9,8 @@
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <h1>
-                   <i class="fa fa-dashboard">&nbsp;</i>Bảng điều khiển 
-                    <small><?=ADMINISTRATOR_VERSION?></small>
+                    <i class="fa fa-dashboard">&nbsp;</i>Bảng điều khiển 
+                    <small><?= ADMINISTRATOR_VERSION ?></small>
                 </h1>
                 <ol class="breadcrumb">
                     <li><a href="admin.php"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
@@ -38,31 +38,44 @@
     <?php require('backend/views/commons/js.php'); ?>
     <script src="./backend/public/fileinput/js/fileinput.js" type="text/javascript"></script>
     <script type="text/javascript">
-        var btnCust = '<button type="button" class="btn btn-default" title="Add picture" ' +
-                ' id="button-id">' +
-                '<i class="glyphicon glyphicon-floppy-disk"></i>' +
-                '</button>';
-        $("#avatar-2").fileinput({
-            overwriteInitial: true,
-            maxFileSize: 1500,
-            showClose: false,
-            showCaption: false,
-            showBrowse: false,
-            browseOnZoneClick: true,
-            removeLabel: '',
-            removeIcon: '<i class="glyphicon glyphicon-remove"></i>',
-            removeTitle: 'Cancel or reset changes',
-            elErrorContainer: '#kv-avatar-errors-2',
-            msgErrorClass: 'alert alert-block alert-danger',
-            defaultPreviewContent: '<img src="<?= $_SESSION["login"]["URL_DAI_DIEN"] ?>" class="profile-user-img img-responsive img-circle" alt="User profile picture" id="avatar_id">',
-            layoutTemplates: {main2: '{preview} ' + btnCust + ' {remove} {browse}'},
-            allowedFileExtensions: ["jpg", "png", "gif"]
-        });
 
         $(document).ready(function (e) {
+            var btnCust = '<button type="button" class="btn btn-default" title="Add picture" ' +
+                    ' id="button-id">' +
+                    '<i class="glyphicon glyphicon-floppy-disk"></i>' +
+                    '</button>';
+            $("#avatar-2").fileinput({
+                overwriteInitial: true,
+                maxFileSize: 1500,
+                showClose: true,
+                showCaption: false,
+                showBrowse: false,
+                showRemove: false,
+                browseOnZoneClick: true,
+                removeLabel: '',
+                removeIcon: '<i class="glyphicon glyphicon-remove"></i>',
+                removeTitle: 'Cancel or reset changes',
+                elErrorContainer: '#kv-avatar-errors-2',
+                msgErrorClass: 'alert alert-block alert-danger',
+                defaultPreviewContent: '<img src="<?= $_SESSION["login"]["URL_DAI_DIEN"] ?>" class="profile-user-img img-responsive img-circle" alt="User profile picture" id="avatar_id" width="100px" height="100px">',
+                layoutTemplates: {main2: '{preview} ' + btnCust + ' {remove} {browse}'},
+                allowedFileExtensions: ["jpg", "png", "gif"]
+            });
+
+            $("#button-id").prop("disabled", true);             
+            $("#button-id").hide();
+
             $('#button-id').click(function () {
                 $('#uploadimage').submit();
             });
+
+            $(".fileinput-remove").click(function () {
+                $("#avatar-id").attr("src", $("#id-url-avatar-temp").val());
+                $("#button-id").prop("disabled", true);                
+                $("#button-id").hide();
+
+            });
+
             $("#uploadimage").on('submit', (function (e) {
                 e.preventDefault();
                 $("#message").empty();

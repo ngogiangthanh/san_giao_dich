@@ -3,6 +3,16 @@
 
     <!-- Profile Image -->
     <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Thông tin cơ bản</h3>
+            <!-- tools box -->
+            <div class="pull-right box-tools">
+                <button type="button" class="btn btn-default btn-xs" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i></button>
+            </div>
+            <!-- /. tools -->
+        </div>
+
         <div class="box-body box-profile">
             <img class="profile-user-img img-responsive img-circle" src="<?= $_SESSION["login"]["URL_DAI_DIEN"] ?>" alt="User profile picture">
 
@@ -12,16 +22,16 @@
             <p class="text-muted text-center"><i class="fa fa-quote-left"></i><?= $_SESSION['login']['CAU_NOI'] ?><i class="fa fa-quote-right"></i></p>
             <ul class="list-group list-group-unbordered">
                 <li class="list-group-item">
-                    <b>Ngày sinh:&nbsp;</b> <a class="pull-right"><?= date_format(date_create($_SESSION["login"]["NGAY_SINH"]), "d/m/Y") ?></a>
+                    <b><i class="fa fa-birthday-cake"></i>&nbsp;Ngày sinh:&nbsp;</b> <a class="pull-right"><?= date_format(date_create($_SESSION["login"]["NGAY_SINH"]), "d/m/Y") ?></a>
                 </li>
                 <li class="list-group-item">
-                    <b>Giới tính:&nbsp;</b> <a class="pull-right"><?= $gender[$_SESSION["login"]["GIOI_TINH"]] ?></a>
+                    <b><i class="fa fa-male"></i>&nbsp;Giới tính:&nbsp;</b> <a class="pull-right"><?= $gender[$_SESSION["login"]["GIOI_TINH"]] ?></a>
                 </li>
                 <li class="list-group-item">
-                    <b>Ngày tạo:&nbsp;</b> <a class="pull-right"><?= date_format(date_create($_SESSION["login"]["THOI_DIEM_TAO"]), "H:i:s d/m/Y") ?></a>
+                    <b><i class="fa fa-calendar"></i>&nbsp;Tham gia:&nbsp;</b> <a class="pull-right"><?= date_format(date_create($_SESSION["login"]["THOI_DIEM_TAO"]), "d/m/Y") ?></a>
                 </li>
                 <li class="list-group-item">
-                    <b>Trạng thái:&nbsp;</b> <a class="pull-right"><?= $status[$_SESSION["login"]["TRANG_THAI"]] ?></a>
+                    <b><i class="fa fa-cogs"></i>&nbsp;Trạng thái:&nbsp;</b> <a class="pull-right"><?= $status[$_SESSION["login"]["TRANG_THAI"]] ?></a>
                 </li>
             </ul>
         </div>
@@ -33,6 +43,12 @@
     <div class="box box-primary">
         <div class="box-header with-border">
             <h3 class="box-title">Thông tin liên lạc</h3>
+            <!-- tools box -->
+            <div class="pull-right box-tools">
+                <button type="button" class="btn btn-default btn-xs" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fa fa-minus"></i></button>
+            </div>
+            <!-- /. tools -->
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -66,7 +82,8 @@
 <div class="col-md-9">
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#settings" data-toggle="tab">Cập nhật thông tin</a></li>
+            <li class="active"><a href="#settings" data-toggle="tab"><i class="fa fa-pencil"></i>&nbsp;Cập nhật thông tin</a></li>
+            <li><a href="#status" data-toggle="tab"><i class="fa fa-weixin"></i>&nbsp;Cập nhật cảm nghĩ</a></li>
         </ul>
         <div class="tab-content">
 
@@ -87,14 +104,20 @@
                         <label for="inputHoTen" class="col-sm-2 control-label">Họ tên:</label>
 
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="inputHoTen" name="hoTen" value="<?= $_SESSION['login']['HO_TEN'] ?>" placeholder="Nhập họ tên">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="inputHoTen" name="hoTen" value="<?= $_SESSION['login']['HO_TEN'] ?>" placeholder="Nhập họ tên">
+                                <span class="input-group-addon" ><i class="fa fa-cc-visa"></i></span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="inputNgaySinh" class="col-sm-2 control-label">Ngày sinh:</label>
 
                         <div class="col-sm-10">
-                            <input type="date" class="form-control" id="inputNgaySinh" name="ngaySinh" placeholder="Nhập ngày sinh" value="<?= $_SESSION['login']['NGAY_SINH'] ?>">
+                            <div class="input-group"> 
+                                <input type="date" class="form-control" id="inputNgaySinh" name="ngaySinh" placeholder="Nhập ngày sinh" value="<?= $_SESSION['login']['NGAY_SINH'] ?>">
+                                <span class="input-group-addon" ><i class="fa fa-birthday-cake"></i></span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -124,28 +147,33 @@
                         <label for="inputEmail" class="col-sm-2 control-label">Email:</label>
 
                         <div class="col-sm-10">
-                            <input type="email" class="form-control" id="inputEmail" name="email" value="<?= $_SESSION['login']['EMAIL'] ?>" placeholder="Nhập email">
+                            <div class="input-group"> 
+                                <input type="email" class="form-control" id="inputEmail" name="email" value="<?= $_SESSION['login']['EMAIL'] ?>" placeholder="Nhập email">
+                                <span class="input-group-addon" ><i class="fa fa-envelope"></i></span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="inputSDT" class="col-sm-2 control-label">Số điện thoại:</label>
 
                         <div class="col-sm-10">
-                            <input type="tel" class="form-control" id="inputSDT" name="sdt" value="<?= $_SESSION['login']['SDT'] ?>" placeholder="Nhập số điện thoại">
+                            <div class="input-group"> 
+                                <input type="tel" class="form-control" id="inputSDT" name="sdt" value="<?= $_SESSION['login']['SDT'] ?>" placeholder="Nhập số điện thoại">
+                                <span class="input-group-addon" ><i class="fa fa-phone"></i></span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="inputDiaChi" class="col-sm-2 control-label">Địa chỉ:</label>
-
                         <div class="col-sm-10">
                             <textarea class="form-control" id="inputDiaChi" name="diaChi" placeholder="Nhập địa chỉ"><?= $_SESSION['login']['DIA_CHI'] ?></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-primary">Lưu</button>
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#change_password" >Đổi mật khẩu</button>
-                            <button type="reset" class="btn btn-default">Làm lại</button>
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i>&nbsp;Lưu</button>
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#change_password" ><i class="fa fa-key"></i>&nbsp;Đổi mật khẩu</button>
+                            <button type="reset" class="btn btn-default"><i class="ionicons ion-android-sync"></i>&nbsp;Làm lại</button>
                         </div>
                     </div>
 
@@ -156,33 +184,39 @@
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title">Đổi mật khẩu</h4>
+                                        <h4 class="modal-title"><i class="fa fa-pencil"></i>&nbsp;Đổi mật khẩu</h4>
                                     </div>
                                     <div class="modal-body">
                                         <!-- Password input-->
                                         <div class="form-group">
                                             <label class="col-md-4 control-label" for="inputOldPassword">Mật khẩu hiện tại:</label>
-                                            <div class="col-md-4">
-                                                <input id="inputOldPassword" name="inputOldPassword" type="password" placeholder="Nhập mật khẩu hiện tại" class="form-control input-md" required="">
-
+                                            <div class="col-md-8">
+                                                <div class="input-group"> 
+                                                    <input id="inputOldPassword" name="inputOldPassword" type="password" placeholder="Nhập mật khẩu hiện tại" class="form-control input-md" required="">
+                                                    <span class="input-group-addon" ><i class="fa fa-key"></i></span>
+                                                </div>
                                             </div>
                                         </div>
 
                                         <!-- Password input-->
                                         <div class="form-group">
                                             <label class="col-md-4 control-label" for="inputNewPassword">Mật khẩu mới:</label>
-                                            <div class="col-md-4">
-                                                <input id="inputNewPassword" name="inputNewPassword" type="password" placeholder="Nhập mật khẩu mới" class="form-control input-md" required="">
-
+                                            <div class="col-md-8">
+                                                <div class="input-group"> 
+                                                    <input id="inputNewPassword" name="inputNewPassword" type="password" placeholder="Nhập mật khẩu mới" class="form-control input-md" required="">
+                                                    <span class="input-group-addon" ><i class="fa fa-key"></i></span>
+                                                </div>
                                             </div>
                                         </div>
 
                                         <!-- Password input-->
                                         <div class="form-group">
                                             <label class="col-md-4 control-label" for="inputConfirmPassword">Xác nhận mật khẩu:</label>
-                                            <div class="col-md-4">
-                                                <input id="inputConfirmPassword" name="inputConfirmPassword" type="password" placeholder="Nhập lại mật khẩu" class="form-control input-md" required="">
-
+                                            <div class="col-md-8">
+                                                <div class="input-group"> 
+                                                    <input id="inputConfirmPassword" name="inputConfirmPassword" type="password" placeholder="Nhập lại mật khẩu" class="form-control input-md" required="">
+                                                    <span class="input-group-addon" ><i class="fa fa-key"></i></span>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -190,8 +224,9 @@
                                         <div class="form-group">
                                             <label class="col-md-4 control-label" for="btnSave"></label>
                                             <div class="col-md-8">
-                                                <button type="submit" id="btnSave" name="btnSave" class="btn btn-success">Lưu</button>
-                                                <button type="reset" id="btnClear" name="btnClear" class="btn btn-default">Xóa</button>
+                                                <button type="submit" id="btnSave" name="btnSave" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Lưu</button>
+                                                <button type="reset" id="btnClear" name="btnClear" class="btn btn-warning"><i class="ionicons ion-android-sync"></i>&nbsp;Làm lại</button> 
+                                                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i>&nbsp;Đóng</button>
                                             </div>
                                         </div>
                                     </div>
@@ -207,7 +242,7 @@
 
                     <form id="uploadimage" action="" method="post" enctype="multipart/form-data">
                         <div class="modal" id="upload_avatar" tabindex="-1" role="dialog" data-backdrop="false">
-                            <div class="modal-dialog">
+                            <div class="modal-dialog modal-sm">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -215,11 +250,9 @@
                                         <h4 class="modal-title">Cập nhật ảnh đại diện</h4>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="form-group">
-                                            <label class="col-md-4 control-label" for="fileAvatar">Chọn ảnh:</label>
-                                            <div class="col-md-4 center">
-                                                <input id="avatar-2" name="file" type="file" class="file-loading" >
-                                            </div>
+                                        <div class="form-group text-center">
+                                            <label for="fileAvatar">Chọn ảnh:</label>
+                                            <input id="avatar-2" name="file" type="file" class="file-loading form-control"/>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -233,6 +266,22 @@
                     <!-- /.modal -->
             </div>
             <!-- /.tab-pane -->
+
+            <div class="tab-pane" id="status">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <textarea class="form-control" id="inputCauNoi" name="inputCauNoi" placeholder="Bạn đang nghĩ gì"><?= $_SESSION['login']['CAU_NOI'] ?></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-4 pull-right">
+                            <button type="submit" class="form-control btn btn-primary"><i class="fa fa-save"></i>&nbsp;Cập nhật</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
         </div>
         <!-- /.tab-content -->
     </div>

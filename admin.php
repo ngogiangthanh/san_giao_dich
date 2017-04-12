@@ -8,6 +8,7 @@ define("PAGING_NEXT", 'Trang kế');
 define("PAGING_FIRST", 'Trang đầu');
 define("PAGING_END", 'Trang cuối');
 define("URL_UPLOAD", "./uploads/images/avatar/");
+define("URL_UPLOAD_LOGO_BANNER", "./uploads/images/");
 include_once './libraries/functions.php';
 include_once './libraries/workwithdb.php';
 chmod("./uploads", 777);   // decimal; probably incorrect

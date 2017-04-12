@@ -1,6 +1,11 @@
 <div class="box">
     <div class="box-header">
-        <h3 class="box-title">Danh sách thành viên</h3>
+        <h3 class="box-title"><i class="fa fa-list"></i>&nbsp;Danh sách thành viên</h3>
+        <!-- tools box -->
+        <div class="pull-right box-tools">
+            <button type="button" class="btn btn-success btn-sm" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                <i class="fa fa-minus"></i></button>
+        </div>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -34,12 +39,12 @@
         <table class="table table-bordered table-striped table-hover table-condensed table-responsive">
             <thead>
                 <tr>
-                    <th class="text-center">ID</th>
-                    <th class="text-center">Họ tên</th>
-                    <th class="text-center">Tài khoản</th>
-                    <th class="text-center">Thời điểm tạo</th>
-                    <th class="text-center">Trạng thái</th>
-                    <th class="text-center">Thao tác</th>
+                    <th class="text-center"><i class="fa fa-key"></i>&nbsp;ID</th>
+                    <th class="text-center"><i class="fa fa-credit-card"></i>&nbsp;Họ tên</th>
+                    <th class="text-center"><i class="fa fa-user"></i>&nbsp;Tài khoản</th>
+                    <th class="text-center"><i class="fa fa-clock-o"></i>&nbsp;Thời điểm tạo</th>
+                    <th class="text-center"><i class="fa fa-user-times"></i>&nbsp;Trạng thái</th>
+                    <th class="text-center"><i class="fa fa-magic"></i>&nbsp;Thao tác</th>
                 </tr>
             </thead>
             <tbody class="text-center">
@@ -100,7 +105,6 @@
                 <!-- Password input-->
                 <div class="row">
                     <div class="col-sm-12">
-
                         <form id="uploadimage" action="" method="post" enctype="multipart/form-data">
                             <div class="row">
                                 <label for="inputAvatar" class="col-sm-4 control-label text-center">
@@ -209,12 +213,11 @@
 
                             <div class="row pull-right">
                                 <div class="col-sm-12 ">
-                                    <button type="submit" class="btn btn-success">Lưu</button>		
-                                    <button type="button" class="btn btn-warning" onclick="loadEditForm(getARow($('#id-user').val()))">Làm lại</button>	
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>	
+                                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Lưu</button>		
+                                    <button type="button" class="btn btn-warning" onclick="loadEditForm(getARow($('#id-user').val()))"><i class="ionicons ion-android-sync"></i>&nbsp;Làm lại</button>	
+                                    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i>&nbsp;Đóng</button>	
                                 </div>
                             </div>
-
                         </form> 		
                     </div>
                 </div>
@@ -238,8 +241,8 @@
                 <p>Xác nhận xóa thành viên?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Đóng</button>
-                <a href='#' id='delete-confirm-btn' class="btn btn-outline">Xác nhận</a>
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal"><i class="fa fa-times"></i>&nbsp;Đóng</button>
+                <a href='#' id='delete-confirm-btn' class="btn btn-outline"><i class="fa fa-check"></i>&nbsp;Xác nhận</a>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -285,7 +288,8 @@ echo "var userShorts = " . $js_array . ";\n";
         $("#trang-thai-id").val(dataRow['TRANG_THAI']).change();
         $("#cau-noi-id").val(dataRow['CAU_NOI']);
         $("#dia-chi-id").val(dataRow['DIA_CHI']);
-        $("#button-id").prop("disabled", true);
+        $("#button-id").prop("disabled", true);              
+        $("#button-id").hide();
     }
     function getARow(id) {
         var dt_size = userShorts.length;

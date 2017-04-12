@@ -3,8 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/san_giao_dich/backend/views/solutions/index.php</file>
-            <file>file:/C:/xampp/htdocs/san_giao_dich/backend/views/solutions/table.php</file>
+            <file>file:/C:/xampp/htdocs/san_giao_dich/backend/controllers/systems/category.php</file>
+            <file>file:/C:/xampp/htdocs/san_giao_dich/backend/views/systems/category-form.php</file>
+            <file>file:/C:/xampp/htdocs/san_giao_dich/backend/views/users/table.php</file>
+            <file>file:/C:/xampp/htdocs/san_giao_dich/backend/models/users.php</file>
+            <file>file:/C:/xampp/htdocs/san_giao_dich/backend/controllers/users/index.php</file>
+            <file>file:/C:/xampp/htdocs/san_giao_dich/backend/views/systems/category.php</file>
         </group>
     </open-files>
 </project-private>

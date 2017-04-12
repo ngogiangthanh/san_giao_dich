@@ -5,10 +5,10 @@
     <!-- USERS LIST -->
     <div class="box box-danger">
         <div class="box-header with-border">
-            <h3 class="box-title">Thành viên mới nhất</h3>
+            <h3 class="box-title"><i class="fa fa-users"></i>&nbsp;Thành viên mới nhất</h3>
 
             <div class="box-tools pull-right">
-                <span class="label label-danger"><?= count($userLastests) ?> thành viên mới</span>
+                <span class="label label-danger">Có <?= count($userLastests) ?> thành viên mới</span>
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
             </div>
@@ -32,7 +32,7 @@
         </div>
         <!-- /.box-body -->
         <div class="box-footer text-center">
-            <a href="admin.php?controller=users&action=list" class="uppercase">Xem tất cả</a>
+            <a href="admin.php?controller=users&action=list" class="uppercase">Xem tất cả&nbsp;<i class="fa fa-arrow-circle-o-right"></i></a>
         </div>
         <!-- /.box-footer -->
     </div>
@@ -43,16 +43,16 @@
 <div class="col-md-6">
     <div class="box">
         <div class="box-header with-border">
-            <h3 class="box-title">Danh sách thành viên</h3>
+            <h3 class="box-title"><i class="fa fa-list"></i>&nbsp;Danh sách thành viên</h3>
             <div class="box-tools pull-right">
-                <span class="label label-success"><?= $userCount ?> thành viên</span>
+                <span class="label label-success">Tổng số <?= $userCount ?> thành viên</span>
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
             </div>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-            <table class="table table-bordered">
+            <table class="table table-striped table-bordered text-center">
                 <thead>
                     <tr>
                         <th style="width: 10px">ID</th>
@@ -82,7 +82,7 @@
                 <tfoot>
                     <tr>
                         <td colspan="4" class="box-footer text-center">
-                            <a href="admin.php?controller=users&action=list" class="uppercase">Xem tất cả</a>
+                            <a href="admin.php?controller=users&action=list" class="uppercase">Xem tất cả&nbsp;<i class="fa fa-arrow-circle-o-right"></i></a>
                         </td>
                     </tr>
                 </tfoot>
