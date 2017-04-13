@@ -27,8 +27,7 @@ if (file_exists($file)) {
     } else {
         require('backend/controllers/home/login.php');
     }
-
-//echo file_put_contents("./libraries/workwithdb.php","Hello World. Testing!");
+//echo file_put_contents("./libraries/test.php","Hello World. Testing!");
 
     $conn->CloseConnection();
 } else {

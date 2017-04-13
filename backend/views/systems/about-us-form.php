@@ -25,7 +25,7 @@
                 <div class="col-sm-12 form-group">
                     <button type="submit" class="btn btn-success"><i class="fa fa-save"></i>&nbsp;Lưu</button>		
                     <button type="button" class="btn btn-warning" onclick="location.href='admin.php?controller=systems&action=about-us'"><i class="ionicons ion-android-sync"></i>&nbsp;Làm lại</button>	
-                    <a href="admin.php?controller=systems" class="btn btn-default" data-dismiss="modal"><i class="fa fa-backward"></i>&nbsp;Quay lại</a>	
+                    <a href="admin.php?controller=systems" class="btn btn-default"><i class="fa fa-backward"></i>&nbsp;Quay lại</a>	
                 </div>
             </div>
         </form>
