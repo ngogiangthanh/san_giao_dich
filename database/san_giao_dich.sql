@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 29, 2017 at 12:15 PM
+-- Generation Time: Apr 14, 2017 at 06:28 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -45,6 +45,34 @@ BEGIN
 					linh_vuc.THU_TU = COALESCE(`thu_tu` ,linh_vuc.THU_TU),
 					linh_vuc.HIEN_THI = COALESCE(`hien_thi` ,linh_vuc.HIEN_THI)
 			WHERE linh_vuc.ID = `id`;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `contact_select`(IN `key` varchar(256),IN `trang_thai` tinyint,IN `da_xem` bit, IN `quan_trong` bit, IN `offset` int, IN `limit` int)
+BEGIN
+		SELECT
+		lien_he.ID,
+		lien_he.ID_PHAN_HOI,
+		lien_he.HO_TEN,
+		lien_he.EMAIL,
+		lien_he.TIEU_DE,
+		lien_he.QUAN_TRONG,
+		lien_he.DU_LIEU_LIEN_HE,
+		lien_he.TRANG_THAI,
+		lien_he.THOI_DIEM_CAP_NHAT,
+		lien_he.DA_XEM,
+		nguoi_dung.HO_TEN AS HO_TEN_PHAN_HOI
+		FROM
+		lien_he
+		LEFT OUTER JOIN nguoi_dung ON lien_he.ID_PHAN_HOI = nguoi_dung.ID
+		WHERE
+			(lien_he.TIEU_DE LIKE CONCAT('%',`key` ,'%') OR `key` IS NULL) AND
+			(lien_he.TRANG_THAI = `trang_thai` OR `trang_thai` IS NULL) AND
+			(lien_he.DA_XEM = `da_xem` OR `da_xem` IS NULL) AND
+			(lien_he.QUAN_TRONG = `quan_trong` OR `quan_trong` IS NULL)
+		ORDER BY
+			lien_he.THOI_DIEM_CAP_NHAT DESC
+		LIMIT 
+		`offset` , `limit`;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `info_select`(IN `loai_tt` tinyint(4))
@@ -162,14 +190,19 @@ END$$
 --
 -- Functions
 --
-CREATE DEFINER=`root`@`localhost` FUNCTION `contact_count`() RETURNS int(11)
+CREATE DEFINER=`root`@`localhost` FUNCTION `contact_count`(`key` varchar(256), `trang_thai` tinyint, `da_xem` bit, `quan_trong` bit) RETURNS int(11)
 BEGIN
 	DECLARE ts_lh int; 	
 	SET ts_lh = 0;
 	SELECT 
 		COUNT(*) INTO ts_lh
 	FROM
-		lien_he;
+		lien_he
+	WHERE
+			(lien_he.TIEU_DE LIKE CONCAT('%',`key` ,'%') OR `key` IS NULL) AND
+			(lien_he.TRANG_THAI = `trang_thai` OR `trang_thai` IS NULL) AND
+			(lien_he.DA_XEM = `da_xem` OR `da_xem` IS NULL) AND
+			(lien_he.QUAN_TRONG = `quan_trong` OR `quan_trong` IS NULL);
 
 	return ts_lh;
 END$$
@@ -302,38 +335,38 @@ CREATE TABLE IF NOT EXISTS `lien_he` (
   `HO_TEN` varchar(200) NOT NULL,
   `EMAIL` varchar(256) NOT NULL,
   `TIEU_DE` varchar(256) NOT NULL,
-  `NOI_DUNG_PHAN_HOI` text,
-  `NOI_DUNG_LIEN_HE` text NOT NULL,
+  `DU_LIEU_LIEN_HE` varchar(128) NOT NULL,
   `TRANG_THAI` tinyint(4) NOT NULL DEFAULT '1',
-  `THOI_DIEM_GUI` datetime NOT NULL,
-  `THOI_DIEM_XL` datetime DEFAULT NULL
+  `THOI_DIEM_CAP_NHAT` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `DA_XEM` bit(1) NOT NULL DEFAULT b'0',
+  `QUAN_TRONG` bigint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `lien_he`
 --
 
-INSERT INTO `lien_he` (`ID`, `ID_PHAN_HOI`, `HO_TEN`, `EMAIL`, `TIEU_DE`, `NOI_DUNG_PHAN_HOI`, `NOI_DUNG_LIEN_HE`, `TRANG_THAI`, `THOI_DIEM_GUI`, `THOI_DIEM_XL`) VALUES
-(1, 1, 'Anonymous 1', 'anonymous1@gmail.com', 'Liên hệ số 1 tiêu đề hơi bị dài luôn đó nhá!', 'Chân thành cảm ơn ý kiến của quý khách!', 'StudyLink International là tổ chức giáo giáo dục quốc tế đại diện cho hơn 1.000 trường danh tiếng trên thế giới, được thành lập với mục tiêu trở thành nơi cung cấp dịch vụ tư vấn du học chuyên nghiệp, trung thực và hoàn hảo nhất cho sinh viên Việt Nam. Chúng tôi mở rộng khắp các văn phòng ở trong và ngoài nước: Hồ Chí Minh, Hà Nội, Đà Nẵng, Melbourne và Adelaide (Úc) với mong muốn đáp ứng các nhu cầu đa dạng của quý phụ huynh, học sinh và sinh viên.', 2, '2017-03-11 19:15:38', '2017-03-12 19:15:38'),
-(2, 1, 'Anonymous 2', 'anonymous2@gmail.com', 'Liên hệ số 2 tiêu đề hơi bị dài luôn đó nhá!', 'Chân thành cảm ơn ý kiến của quý khách!', 'Chúng tôi tư vấn và cung cấp miễn phí các dịch vụ\r\n           – Tư vấn chọn khóa học theo định hướng nghề nghiệp trong danh sách tay nghề của Sở Di Trú Úc\r\n           – Hướng dẫn và trợ giúp làm hồ sơ ghi danh, thủ tục chuyển trường\r\n           – Tư vấn, hướng dẫn thủ tục xin/gia hạn visa \r\n           – Quà tặng và/hoặc học bổng cho học sinh theo các chương trình khuyến mãi của công ty.', 2, '2017-03-11 21:15:54', '2017-03-12 21:15:54'),
-(3, 1, 'Anonymous 2', 'anonymous2@gmail.com', 'Liên hệ số 3 tiêu đề hơi bị dài luôn đó nhá!', 'Chân thành cảm ơn ý kiến của quý khách!', 'Schweinsteiger đã thất bại để tỏa sáng ở Old Trafford, nhưng ít nhất, anh đã chinh phục được trái tim của những manucian, bởi sự chuyên nghiệp và hơn hết, một tinh thần cao thượng.', 2, '2017-03-12 19:16:16', '2017-03-13 21:15:54'),
-(4, 1, 'Anonymous 3', 'anonymous3@gmail.com', 'Liên hệ số 4 tiêu đề hơi bị dài luôn đó nhá!', 'Nội dung spam', 'Trận giao hữu tại Signal Iduna Park là dịp để người Đức nhắc nhở Anh, rằng họ ở một đẳng cấp khác hẳn. Nhưng cũng thật trớ trêu, vào những ngày này, một trong những tiền vệ hàng đầu, niềm tự hào của Đức lại chuẩn bị tháo chạy sau khi thất bại để gây ấn tượng tại xứ sương mù. Anh là Bastian Schweinsteiger.', 3, '2017-03-13 19:16:23', '2017-03-14 21:15:54'),
-(5, 1, 'Anonymous 4', 'anonymous4@gmail.com', 'Liên hệ số 5 tiêu đề hơi bị dài luôn đó nhá!', 'Chân thành cảm ơn ý kiến của quý khách!', 'Khi Bastian Schweinsteiger đến MU vào năm 2015, nó là một sự kiện thu hút sự quan tâm lớn. Không chỉ vì đây là cầu thủ người Đức đầu tiên khoác áo Quỷ đỏ tại Premier League, mà còn bởi những giá trị mà anh ta mang lại. Schweinsteiger là một nhà vô địch thế giới, tiền vệ được đánh giá xuất sắc nhất thế hệ của mình và là một người có khả năng nâng tầm đội bóng, cung cấp sự sang trọng và tinh thần chiến thắng.', 2, '2017-03-14 19:16:23', '2017-03-15 21:15:54'),
-(6, 1, 'Anonymous 5', 'anonymous5@gmail.com', 'Liên hệ số 6 tiêu đề hơi bị dài luôn đó nhá!', 'Chân thành cảm ơn ý kiến của quý khách!', 'Nhưng sau 18 tháng, cuộc hôn phối này đã thất bại thảm hại. Vỏn vẹn 35 lần ra sân ở mọi đấu trường, Schweinsteiger ghi được 2 bàn thắng cùng 1 pha kiến tạo. Để giúp bảng thành tích này đỡ nghèo nàn, có thể kể thêm cú sút chệch hướng, vô tình dẫn đến bàn phản lưới của Troy Deeney ở chiến thắng trước Watford cuối năm 2015.', 2, '2017-03-15 19:16:23', '2017-03-16 21:15:54'),
-(7, 1, 'Anonymous 5', 'anonymous5@gmail.com', 'Liên hệ số 7 tiêu đề hơi bị dài luôn đó nhá!', 'Chân thành cảm ơn ý kiến của quý khách!', 'Thật ra thì những thống kê có thể phong phú hơn nếu như Jose Mourinho không bước vào Old Trafford. Ông ta một mực cho rằng tiền vệ 32 tuổi đã hết thời và thay vì cải thiện đội bóng, chỉ khiến mọi thứ trở nên tồi tệ hơn. Cho đến trước ngày 30/11, Schweini đã không được ra sân dù chỉ một lần.', 2, '2017-03-16 19:16:23', '2017-03-17 21:15:54'),
-(8, 1, 'Anonymous 6', 'anonymous6@gmail.com', 'Liên hệ số 8 tiêu đề hơi bị dài luôn đó nhá!', 'Chân thành cảm ơn ý kiến của quý khách!', 'Nếu chỉ đơn giản là ngồi trên ghế dự bị, hẳn tiền vệ người Đức hẳn sẽ thấy dễ chịu hơn. Nhưng không. Phần lớn thời gian mùa giải này của Schweinsteiger diễn ra trên khán đài, mỗi khi MU thi đấu, hoặc trên sân tập cùng đội U21, nếu trong thời gian tập luyện.', 2, '2017-03-17 19:16:23', '2017-03-18 21:15:54'),
-(9, 1, 'Anonymous 7', 'anonymous7@gmail.com', 'Liên hệ số 9 tiêu đề hơi bị dài luôn đó nhá!', 'Chân thành cảm ơn ý kiến của quý khách!', 'Hồi tháng 8 năm ngoái, một đồng đội đã sốc nặng khi thấy nhà vô địch thế giới đang chạy bên cạnh những cầu thủ Học viện. “Anh làm cái quái gì ở đó vậy, Schweini?”, họ hỏi. Anh đơn giản là không thể trả lời.\r\n\r\nTrong thỏa thuận đã ký vào năm 2015, có một điều khoản quy định lương và thưởng của Schweinsteiger sẽ giảm dần theo từng năm, và căn cứ vào số trận ra sân. Có nghĩa là, MU có thể tiết kiệm phần lớn hóa đơn tiền lương 80.000 bảng mỗi tuần nếu tiền vệ 32 tuổi ngồi chơi xơi nước dài ngày.   ', 2, '2017-03-18 19:16:23', '2017-03-19 21:15:54'),
-(10, 1, 'Anonymous 8', 'anonymous8@gmail.com', 'Liên hệ số 10 tiêu đề hơi bị dài luôn đó nhá!', 'Chân thành cảm ơn ý kiến của quý khách!', 'Điều đó không ngăn cản Schweinsteiger thôi nỗ lực. Anh vẫn tập luyện chăm chỉ bất kể nắng mưa hay ngày nghỉ và hy vọng một ngày nào đó, Mourinho sẽ thừa nhận. Nhưng tất cả chỉ giúp anh có mặt trên ghế dự bị một vài lần, ra sân một vài phút.', 2, '2017-03-19 19:16:23', '2017-03-20 21:15:54'),
-(11, 1, 'Anonymous 9', 'anonymous9@gmail.com', 'Liên hệ số 11 tiêu đề hơi bị dài luôn đó nhá!', 'Chân thành cảm ơn ý kiến của quý khách!', 'Cuối cùng thì tiền vệ người Đức buộc phải đưa ra quyết định: đến Chicago Fire như giải pháp để cứu lấy sự nghiệp đang lụi tàn. “Tôi rất buồn khi phải chia tay những người bạn ở MU”, anh nói trong ngày chia tay, “Tôi hạnh phúc khi được là một phần của đội bóng giành Cúp FA và sẽ luôn nhớ về tinh thần cũng như niềm đam mê của đội bóng”.', 2, '2017-03-20 19:16:23', '2017-03-21 21:15:54'),
-(12, 1, 'Anonymous 10', 'anonymous10@gmail.com', 'Liên hệ số 12 tiêu đề hơi bị dài luôn đó nhá!', 'Chân thành cảm ơn ý kiến của quý khách!', 'Schweinsteiger đã thất bại để tỏa sáng ở Old Trafford, nhưng ít nhất, anh đã chinh phục được trái tim của những manucian, bởi sự chuyên nghiệp, tinh thần không bao giờ bỏ cuộc và sự cao thượng. Chưa một lời phàn nàn hay hành động tiêu cực nào được đưa ra bởi Schweini, cho dù MU đã không đối xử với anh một cách công bằng.\r\n\r\n18 tháng ở MU, Schweinsteiger ra sân 35 trận, 12 trận chơi trọn vẹn 90 phút, thực hiện cả thảy 1.546 đường chuyền, tạo ra 10 cơ hội, tung ra 24 cú dứt điểm với 5 trúng đích và ghi được 2 bàn cùng 1 đường kiến tạo. ', 2, '2017-03-21 19:16:23', '2017-03-22 21:15:54'),
-(13, 1, 'guest 1', 'guest1@gmail.com', 'Liên hệ số 13 tiêu đề hơi bị dài luôn đó nhá!', 'Chân thành cảm ơn ý kiến của quý khách!', 'Trước khi mùa giải 2017 khởi tranh, Roger Federer tụt xuống vị trí thứ 16 trên bảng xếp hạng ATP và bị đánh giá sắp hết thời. Tuy nhiên, huyền thoại người Thụy Sỹ đã khiến tất cả trải qua cảm giác kinh ngạc khi lần lượt đăng quang hai giải đấu lớn nhất Australian Open và Indian Wells.', 2, '2017-03-22 19:16:23', '2017-03-23 21:15:54'),
-(14, 1, 'Anonymous 11', 'anonymous11@gmail.com', 'Liên hệ số 14 tiêu đề hơi bị dài luôn đó nhá!', 'Nội dung spam', 'Ở cả 2 chức vô địch trên, Federer đều xuất sắc vượt qua những đối thủ tên tuổi, trong đó có hai lần trước Stan Wawrinka. Chứng kiến màn trình diễn siêu đẳng như hồi xuân của đàn anh đồng hương, “Stan thép” cho rằng FedEx hoàn toàn có khả năng trở lại thống trị làng quần vợt thế giới.', 3, '2017-03-23 19:16:23', '2017-03-24 21:15:54'),
-(15, 1, 'guest 2', 'guest2@gmail.com', 'Liên hệ số 15 tiêu đề hơi bị dài luôn đó nhá!', 'Chân thành cảm ơn ý kiến của quý khách!', 'Hiện huyền thoại Andre Agassi là tay vợt nhiều tuổi nhất từng giữ ngôi số 1 thế giới, 33 tuổi. Để vượt qua kỷ lục trên, Federer sẽ còn rất nhiều việc phải làm.\r\n\r\nSau chiến thắng tại Australian Open và Indian Wells, FedEx lúc này đã vươn lên vị trí thứ 6 trên bảng xếp hạng ATP với 4.305 điểm, chỉ kém 3 tay vợt xếp trên Milos Raonic, Kei Nishikori và Stan Wawrinka lần lượt 175, 425 và 1.400 điểm.', 2, '2017-03-24 19:16:23', '2017-03-25 21:15:54'),
-(16, NULL, 'Anonymous 12', 'anonymous12@gmail.com', 'Liên hệ số 16 tiêu đề hơi bị dài luôn đó nhá!', NULL, '“Federer chơi ở đẳng cấp rất cao. Anh ấy di chuyển gần vạch cuối sân, sử dụng nhiều hơn những cú topspin bằng cả tay thuận hoặc trái đưa bóng xoáy nhưng vẫn đạt độ chuẩn xác rất cao. Anh ấy cũng trả giao rất tốt và gây áp lực lên đối thủ bất kỳ thời điểm nào. Đó là điều khác biệt tôi thấy từ những chiến thắng gần đây của anh ấy”, Wawrinka phân tích khi chuẩn bị tham dự Miami Open.', 1, '2017-03-25 19:16:54', NULL),
-(17, NULL, 'Anonymous 13', 'anonymous13@gmail.com', 'Liên hệ số 17 tiêu đề hơi bị dài luôn đó nhá!', NULL, '“Ở tuổi 25, tôi đã thắng tới 90% số trận ra sân. Phần nào đánh mất đi sự dẻo dai bởi dấu ấn tuổi tác nhưng bù lại, kinh nghiệm có thể giúp tôi thi đấu ở đẳng cấp cao thêm một thời gian dài”, huyền thoại người Thụy Sỹ tự tin cho biết.\r\n\r\nDù có thực hiện được mục tiêu táo bạo trên hay không, điều đó cũng chẳng quá quan trọng với những người yêu mến Federer. Lúc này, được chiêm ngưỡng thần tượng bằng xương bằng thịt còn đủ sức ra sân thi đấu với thứ tennis đỉnh cao, đó đã là điều quá may mắn.', 1, '2017-03-25 19:16:54', NULL),
-(18, NULL, 'guest 3', 'guest3@gmail.com', 'Liên hệ số 18 tiêu đề hơi bị dài luôn đó nhá!', NULL, 'StudyLink Hà Nội cam kết khả năng đạt visa với tỉ lệ thành công cao nhất, kèm theo đó còn có các chương trình học bổng hấp dẫn, nhiều quà tặng ưu đãi khác dành cho các bạn học sinh, sinh viên để các bạn hoàn toàn yên tâm và tin tưởng ở nơi khởi nghiệp, góp phần tạo dựng sự nghiệp thành công trong tương lai cũng như nâng cao chất lượng dịch vụ của StudyLink International.', 1, '2017-03-25 19:16:54', NULL),
-(19, NULL, 'Anonymous 14', 'anonymous14@gmail.com', 'Liên hệ số 19 tiêu đề hơi bị dài luôn đó nhá!', NULL, 'StudyLink Hà Nội cam kết khả năng đạt visa với tỉ lệ thành công cao nhất, kèm theo đó còn có các chương trình học bổng hấp dẫn, nhiều quà tặng ưu đãi khác dành cho các bạn học sinh, sinh viên để các bạn hoàn toàn yên tâm và tin tưởng ở nơi khởi nghiệp, góp phần tạo dựng sự nghiệp thành công trong tương lai cũng như nâng cao chất lượng dịch vụ của StudyLink International.', 1, '2017-03-25 19:16:54', NULL),
-(20, NULL, 'Anonymous 15', 'anonymous15@gmail.com', 'Liên hệ số 20 tiêu đề hơi bị dài luôn đó nhá!', NULL, 'Ronaldo tươi cười tập luyện sau khi được vinh danh\r\n10:25 22/03/2017\r\n\r\n1\r\n Ngôi sao 32 tuổi tỏ ra rất vui vẻ trong buổi tập cùng đội tuyển Bồ Đào Nha chuẩn bị cho trận đấu thuộc vòng loại World Cup 2018 với Hungary.\r\nRonaldo tuoi cuoi tap luyen sau khi duoc vinh danh hinh anh 1\r\nCristiano Ronaldo và các đồng đội trải qua buổi tập vui vẻ trước khi bước vào trận đấu quan trọng với Hungary ở vòng loại World Cup 2018.\r\nRonaldo tuoi cuoi tap luyen sau khi duoc vinh danh hinh anh 2\r\nNụ cười xuất hiện khá thường trực trên đôi môi CR7.\r\nRonaldo tuoi cuoi tap luyen sau khi duoc vinh danh hinh anh 3\r\nĐang không có phong độ thật tốt trong màu áo Real Madrid nhưng Ronaldo vẫn được kỳ vọng sẽ tỏa sáng mang về chiến thắng cho Bồ Đào Nha trong cuộc tiếp đón đối thủ cạnh tranh trực tiếp.', 1, '2017-03-25 19:16:54', NULL);
+INSERT INTO `lien_he` (`ID`, `ID_PHAN_HOI`, `HO_TEN`, `EMAIL`, `TIEU_DE`, `DU_LIEU_LIEN_HE`, `TRANG_THAI`, `THOI_DIEM_CAP_NHAT`, `DA_XEM`, `QUAN_TRONG`) VALUES
+(1, 1, 'Anonymous 1', 'anonymous1@gmail.com', 'Liên hệ số 1 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/1.txt', 2, '2017-04-14 15:03:56', b'0', 1),
+(2, 1, 'Anonymous 2', 'anonymous2@gmail.com', 'Liên hệ số 2 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/2.txt', 2, '2017-04-14 15:03:57', b'0', 1),
+(3, 1, 'Anonymous 2', 'anonymous2@gmail.com', 'Liên hệ số 3 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/3.txt', 2, '2017-04-14 15:03:57', b'1', 1),
+(4, 1, 'Anonymous 3', 'anonymous3@gmail.com', 'Liên hệ số 4 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/4.txt', 4, '2017-04-14 14:52:55', b'0', 0),
+(5, 1, 'Anonymous 4', 'anonymous4@gmail.com', 'Liên hệ số 5 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/5.txt', 2, '2017-04-14 14:53:01', b'1', 0),
+(6, 1, 'Anonymous 5', 'anonymous5@gmail.com', 'Liên hệ số 6 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/6.txt', 5, '2017-04-14 14:52:53', b'0', 0),
+(7, 1, 'Anonymous 5', 'anonymous5@gmail.com', 'Liên hệ số 7 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/7.txt', 2, '2017-04-14 14:21:24', b'0', 0),
+(8, 1, 'Anonymous 6', 'anonymous6@gmail.com', 'Liên hệ số 8 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/8.txt', 4, '2017-04-14 15:03:59', b'0', 1),
+(9, 1, 'Anonymous 7', 'anonymous7@gmail.com', 'Liên hệ số 9 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/9.txt', 2, '2017-04-14 14:53:00', b'1', 0),
+(10, 1, 'Anonymous 8', 'anonymous8@gmail.com', 'Liên hệ số 10 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/10.txt', 5, '2017-04-14 14:52:59', b'0', 0),
+(11, 1, 'Anonymous 9', 'anonymous9@gmail.com', 'Liên hệ số 11 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/11.txt', 5, '2017-04-14 14:55:58', b'0', 0),
+(12, 1, 'Anonymous 10', 'anonymous10@gmail.com', 'Liên hệ số 12 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/12.txt', 2, '2017-04-14 15:04:02', b'0', 1),
+(13, 1, 'guest 1', 'guest1@gmail.com', 'Liên hệ số 13 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/13.txt', 2, '2017-04-14 14:21:24', b'0', 0),
+(14, 1, 'Anonymous 11', 'anonymous11@gmail.com', 'Liên hệ số 14 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/14.txt', 3, '2017-04-14 14:21:24', b'0', 0),
+(15, 1, 'guest 2', 'guest2@gmail.com', 'Liên hệ số 15 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/15.txt', 2, '2017-04-11 14:21:24', b'0', 0),
+(16, NULL, 'Anonymous 12', 'anonymous12@gmail.com', 'Liên hệ số 16 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/16.txt', 1, '2017-04-14 14:21:24', b'0', 0),
+(17, NULL, 'Anonymous 13', 'anonymous13@gmail.com', 'Liên hệ số 17 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/17.txt', 1, '2017-04-14 14:21:24', b'0', 0),
+(18, NULL, 'guest 3', 'guest3@gmail.com', 'Liên hệ số 18 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/18.txt', 1, '2017-04-14 14:21:24', b'0', 0),
+(19, NULL, 'Anonymous 14', 'anonymous14@gmail.com', 'Liên hệ số 19 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/19.txt', 1, '2017-04-14 14:21:24', b'0', 0),
+(20, NULL, 'Anonymous 15', 'anonymous15@gmail.com', 'Liên hệ số 20 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/20.txt', 1, '2017-04-14 14:21:24', b'0', 0);
 
 -- --------------------------------------------------------
 
@@ -356,10 +389,10 @@ CREATE TABLE IF NOT EXISTS `linh_vuc` (
 --
 
 INSERT INTO `linh_vuc` (`ID`, `TEN_LINH_VUC`, `MO_TA_LINH_VUC`, `URL_THUMNAIL`, `URL_MENU`, `THU_TU`, `HIEN_THI`) VALUES
-(1, 'Công nghệ Thông tin', 'Các ý tưởng khởi nghiệp thuộc lĩnh vực Công nghệ Thông tin', 'it-solution.jpg', 'it-solution', 1, b'1'),
-(2, 'Công nghệ thực phẩm', 'Các ý tưởng khởi nghiệp thuộc lĩnh vực Công nghệ Thực phẩm', 'food-technology.jpg', 'food-technology', 2, b'1'),
-(3, 'Giải pháp kinh doanh', 'Các ý tưởng khởi nghiệp thuộc lĩnh vực Giải pháp kinh Doanh', 'business-solution.jpg', 'business-solution', 3, b'1'),
-(4, 'Tên lĩnh vực demo', 'Các ý tưởng khởi nghiệp lĩnh vực demo', 'default.jpg', 'demo-solution', 4, b'0');
+(1, 'Công nghệ Thông tin', 'Các ý tưởng khởi nghiệp thuộc lĩnh vực Công nghệ Thông tin', './uploads/images/category/it-solution.jpg', 'it-solution', 1, b'1'),
+(2, 'Công nghệ thực phẩm', 'Các ý tưởng khởi nghiệp thuộc lĩnh vực Công nghệ Thực phẩm', './uploads/images/category/food-technology.jpg', 'food-technology', 2, b'1'),
+(3, 'Giải pháp kinh doanh', 'Các ý tưởng khởi nghiệp thuộc lĩnh vực Giải pháp kinh Doanh', './uploads/images/category/business-solution.jpg', 'business-solution', 3, b'1'),
+(4, 'Tên lĩnh vực demo', 'Các ý tưởng khởi nghiệp lĩnh vực demo', './uploads/images/category/default.jpg', 'demo-solution', 4, b'0');
 
 -- --------------------------------------------------------
 
@@ -484,11 +517,11 @@ CREATE TABLE IF NOT EXISTS `thong_tin_to_chuc` (
 INSERT INTO `thong_tin_to_chuc` (`ID`, `THONG_TIN_TO_CHUC`, `LOAI_THONG_TIN`, `THOI_DIEM_CAP_NHAT`, `ID_NGUOI_DUNG`) VALUES
 (1, '<h1>Tìm thấy nhiều vật dụng của bé gái người Việt bị sát hại ở Nhật</h1>\r\n\r\n<p>Cặp sách và một số vật dụng khác mà bé Lê Thị Nhật Linh mang theo vào ngày bị bắt cóc đã được tìm thấy ven sông Tone thuộc tỉnh Ibaraki hôm 28/3.</p>\r\n\r\n<p>Báo <em>Mainichi </em>cho biết ba của bé Linh đã xác nhận đây chính là chiếc cặp của con gái anh. Sông Tone thuộc thành phố Bando, tỉnh Ibaraki. Nơi này cách điểm phát hiện thi thể bé Linh ở con kênh tại Abiko, tỉnh Chiba, khoảng 10 km về hướng tây bắc.</p>\r\n\r\n<table align="center">\r\n	<tbody>\r\n		<tr>\r\n			<td><img alt="Tim thay nhieu vat dung cua be gai nguoi Viet bi sat hai o Nhat hinh anh 1" src="http://znews-photo.d.za.zdn.vn/w660/Uploaded/zugtwi/2017_03_29/nhat1_mcww.jpg" style="height:521px; width:1024px" /></td>\r\n		</tr>\r\n		<tr>\r\n			<td>Cảnh sát Nhật Bản tại hiện trường tìm thấy thi thể bé Linh. Ảnh: <em>ANN</em>.</td>\r\n		</tr>\r\n	</tbody>\r\n</table>\r\n\r\n<p>Bên cạnh đó, tại bãi cỏ cách điểm tìm thấy cặp của bé Linh khoảng 500 m, cảnh sát cũng phát hiện một bộ quần áo bé gái giống với trang phục mà nạn nhân đã mặc đến trường trong ngày cô bé bị bắt cóc. Cảnh sát đang xác minh liệu bộ đồ này có phải chính là của bé Linh hay không, cũng như khả năng hung thủ đang cố tình phi tang bằng chứng liên quan đến vụ án.</p>\r\n\r\n<p>Đến nay chưa có người nào cung cấp thông tin cho cảnh sát về đối tượng khả nghi có hành động như ném quần áo hoặc vật dụng xuống sông. Trong diễn biến khác, cảnh sát Chiba cho biết có nhiều tin nhắn bí ẩn trên mạng hé mở về địa điểm phát hiện thi thể bé Linh.</p>\r\n\r\n<p>"Ai đó đã đăng tin nhắn này lên mạng vào 21h ngày 24/3 (hơn 12 tiếng sau khi bé Linh mất tích - PV), nói rằng &#39;Khi trời ấm hơn, hãy tìm kiếm ở con kênh xem có thi thể cô gái nào không&#39;", một cảnh sát kể lại với <em>Kyodo</em>.</p>\r\n\r\n<p>Một tin nhắn khác nói rõ ràng hơn: "Hãy tìm kiếm ở con kênh". Một tiếng sau, cảnh sát phát hiện thi thể bé Linh tại con kênh ở Abiko.</p>\r\n\r\n<p>Khoảng 8h40 ngày 24/3, không thấy cháu Linh đến trường, giáo viên thông báo cho gia đình. Tìm kiếm xung quanh khu vực trường không thấy cháu, bố bé gái trình báo cảnh sát Abiko, Nhật Bản. Sáng sớm 26/3, thi thể cháu bé được tìm thấy cạnh bãi cỏ bên con sông tại thành phố Abiko, tỉnh Chiba, cách nhà bé khoảng 10 km.</p>\r\n\r\n<p>Qua khám nghiệm, cảnh sát ước tính bé Linh có thể bị sát hại vào khoảng từ sáng 24/3 đến đêm 25/3. Không loại trừ khả năng em bị giết ngay sau khi bị bắt cóc, lúc đang trên đường tới trường vào thứ sáu tuần trước. Nguyên nhân gây tử vong của bé là do bị siết cổ. Cơ thể của nạn nhân có dấu hiệu bị xâm hại tình dục.</p>\r\n\r\n<p>Cái chết của bé Nhật Linh gây chấn động đối với người dân địa phương ở tỉnh Chiba và truyền thông Nhật Bản. Bộ Ngoại giao Việt Nam đã chỉ đạo đại sứ quán tại Nhật Bản khẩn trương làm việc với các cơ quan chức năng sở tại yêu cầu phía Nhật Bản xác định nguyên nhân tử vong, điều tra, truy bắt hung thủ và xét xử nghiêm theo đúng các quy định pháp luật.</p>\r\n\r\n<p><strong>Mương nước nơi tìm thấy xác bé gái Việt bị giết hại ở Nhật</strong> Thi thể bé Lê Thị Nhật Linh được tìm thấy tại một mương thoát nước cách nhà khoảng 10 km trong tình trạng không quần áo và có dấu hiệu bị xâm hại tình dục trước khi chết.</p>\r\n', 1, '2017-03-29 07:49:01', 3),
 (2, '<p>VCCI CẦN THƠ</p>\r\n\r\n<p>Điện thoại: (0710) 3 824918</p>\r\n\r\n<p>Fax: (0710) 3 824169</p>\r\n\r\n<p>Email: contact@vccimekong.com.vn</p>\r\n\r\n<p>Địa chỉ: 12 Hòa Bình, Q. Ninh Kiều, Tp Cần Thơ</p>\r\n', 3, '2017-03-29 09:11:21', 1),
-(3, 'public/images/logo.png', 4, '2017-03-29 07:48:06', 1),
+(3, './uploads/images/org_logo.png', 4, '2017-03-30 10:06:18', 1),
 (4, 'Mẫu tin về cuộc thi 1', 6, '2017-03-29 07:47:52', 1),
 (5, 'Mẫu tin về cuộc thi 2', 6, '2017-03-29 07:47:44', 1),
-(6, 'AIzaSyDPIECBsdxF1HplLrJzEm0oB0PiMVhfGLg[]VCCI Cần Thơ', 2, '2017-03-29 09:12:57', 1),
-(7, 'public/images/logo.ico', 5, '2017-03-29 07:49:03', 3);
+(6, 'AIzaSyDPIECBsdxF1HplLrJzEm0oB0PiMVhfGLg[]VCCI Cần Thơ', 2, '2017-03-30 10:11:04', 1),
+(7, './uploads/images/org_logo.ico', 5, '2017-03-30 10:10:30', 1);
 
 -- --------------------------------------------------------
 

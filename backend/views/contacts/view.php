@@ -1,6 +1,6 @@
 <?php require('backend/views/commons/header.php'); ?>
-<!-- iCheck -->
-<link rel="stylesheet" href="backend/public/plugins/iCheck/flat/blue.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="backend/public/plugins/iCheck/flat/blue.css">
 <body class="hold-transition skin-blue sidebar-mini">
 
     <div class="wrapper">
@@ -15,7 +15,8 @@
                 </h1>
                 <ol class="breadcrumb">
                     <li><a href="admin.php"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
-                    <li class="active">Trang quản lý các liên hệ</li>
+                    <li><a href="admin.php?controller=contacts"><i class="fa fa-dashboard"></i> Trang quản lý các liên hệ</a></li>
+                    <li class="active"> Trả lời liên hệ</li>
                 </ol>
             </section>
 
@@ -25,7 +26,7 @@
                     <div class="col-sm-12 col-xs-12 col-md-12 col-lg-12 pull-right">
                         <div class="row">
                             <!-- BEGIN CONTENT -->
-                            <?php require('backend/views/contacts/table.php'); ?>
+                            <?php require('backend/views/contacts/view-contact.php'); ?>
                             <!-- END CONTENT -->
                         </div>
                     </div>
@@ -86,30 +87,7 @@
                     $this.toggleClass("fa-star-o");
                 }
             });
-
-            $('#search-term-input').on('keydown', function (e) {
-                if (e.which === 13) {
-                    e.preventDefault();
-                    refreshURL();
-                }
-            });
-
-            $('#search-term-btn').click(function (e) {
-                e.preventDefault();
-                refreshURL();
-            });
-
         });
-
-        function refreshURL() {
-            var key = $.trim($("#search-term-input").val());
-            if (key.length > 0) {
-                location.href = 'admin.php?controller=contacts&search=' + key;
-            } else {
-                location.href = 'admin.php?controller=contacts';
-            }
-        }
-
     </script>
 </body>
 </html>

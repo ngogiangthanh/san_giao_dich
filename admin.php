@@ -1,8 +1,9 @@
 ﻿<?php
 session_start();
+date_default_timezone_set('Asia/Bangkok');
 define("ADMINISTRATOR", 2);
 define("ADMINISTRATOR_VERSION", "v1.0");
-define("LIMIT_PER_PAGE", 5);
+define("LIMIT_PER_PAGE", 10);
 define("PAGING_PREVIOUS", 'Trang trước');
 define("PAGING_NEXT", 'Trang kế');
 define("PAGING_FIRST", 'Trang đầu');

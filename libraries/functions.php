@@ -198,18 +198,37 @@ function alias($str) {
     return $str;
 }
 
-function get_day_name($timestamp) {
+function get_day_name($datetime, $full = false) {
 
-    $date = date_format(date_create($timestamp), 'd/m/Y');
-    $yesterday = mktime(0, 0, 0, date("m"), date("d") - 1, date("Y"));
+    $now = new DateTime;
+    $ago = new DateTime($datetime);
+    $diff = $now->diff($ago);
 
-    if ($date == date('d/m/Y')) {
-        $date = 'Hôm nay';
-    } else if ($date == date('d/m/Y', $yesterday)) {
-        $date = 'Hôm qua';
+    $diff->w = floor($diff->d / 7);
+    $diff->d -= $diff->w * 7;
+
+    $string = array(
+        'y' => 'year',
+        'm' => 'month',
+        'w' => 'week',
+        'd' => 'day',
+        'h' => 'hour',
+        'i' => 'minute',
+        's' => 'second',
+    );
+    foreach ($string as $k => &$v) {
+        if ($diff->$k) {
+            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+        } else {
+            unset($string[$k]);
+        }
     }
 
-    return $date;
+    if (!$full) {
+        $string = array_slice($string, 0, 1);
+    }
+    return $string ? implode(', ', $string) . ' ago' : 'just now';
+
 }
 
 function show_message($type) {

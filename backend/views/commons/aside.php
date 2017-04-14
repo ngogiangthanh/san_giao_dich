@@ -61,7 +61,7 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="admin.php?controller=contacts&action=list"><i class="fa fa-list"></i>&nbsp;Danh sách liên hệ</a></li>
+                    <li><a href="admin.php?controller=contacts"><i class="fa fa-list"></i>&nbsp;Danh sách liên hệ</a></li>
                     <li><a href="admin.php?controller=contacts&action=report"><i class="fa fa-area-chart"></i>&nbsp;Lập thống kê - báo cáo</a></li>
                 </ul>
             </li>
