@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 14, 2017 at 06:28 PM
+-- Generation Time: Apr 22, 2017 at 01:33 PM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -47,11 +47,12 @@ BEGIN
 			WHERE linh_vuc.ID = `id`;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `contact_select`(IN `key` varchar(256),IN `trang_thai` tinyint,IN `da_xem` bit, IN `quan_trong` bit, IN `offset` int, IN `limit` int)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `contact_select`(IN `key` varchar(256),IN `trang_thai` tinyint,IN `da_xem` tinyint, IN `quan_trong` tinyint, IN `spam` tinyint, IN `rac` tinyint, IN `offset` int, IN `limit` int)
 BEGIN
 		SELECT
 		lien_he.ID,
 		lien_he.ID_PHAN_HOI,
+		lien_he.ID_NGUOI_LIEN_HE,
 		lien_he.HO_TEN,
 		lien_he.EMAIL,
 		lien_he.TIEU_DE,
@@ -63,16 +64,58 @@ BEGIN
 		nguoi_dung.HO_TEN AS HO_TEN_PHAN_HOI
 		FROM
 		lien_he
-		LEFT OUTER JOIN nguoi_dung ON lien_he.ID_PHAN_HOI = nguoi_dung.ID
+		LEFT OUTER JOIN nguoi_dung ON lien_he.ID_NGUOI_LIEN_HE = nguoi_dung.ID
 		WHERE
 			(lien_he.TIEU_DE LIKE CONCAT('%',`key` ,'%') OR `key` IS NULL) AND
 			(lien_he.TRANG_THAI = `trang_thai` OR `trang_thai` IS NULL) AND
 			(lien_he.DA_XEM = `da_xem` OR `da_xem` IS NULL) AND
-			(lien_he.QUAN_TRONG = `quan_trong` OR `quan_trong` IS NULL)
+			(lien_he.QUAN_TRONG = `quan_trong` OR `quan_trong` IS NULL) AND
+			(lien_he.SPAM = `spam` OR `spam` IS NULL) AND
+			(lien_he.RAC = `rac` OR `rac` IS NULL)
 		ORDER BY
 			lien_he.THOI_DIEM_CAP_NHAT DESC
 		LIMIT 
 		`offset` , `limit`;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `contact_select_one`(IN `id` int)
+BEGIN
+		SELECT
+		lien_he.ID,
+		lien_he.ID_NGUOI_LIEN_HE,
+		lien_he.ID_PHAN_HOI,
+		lien_he.EMAIL,
+		lien_he.TIEU_DE,
+		lien_he.QUAN_TRONG,
+		lien_he.DU_LIEU_LIEN_HE,
+		lien_he.TRANG_THAI,
+		lien_he.THOI_DIEM_CAP_NHAT,
+		lien_he.DA_XEM,
+		lien_he.HO_TEN,
+		nguoi_dung.HO_TEN AS HO_TEN_PHAN_HOI,
+		nguoi_dung.URL_DAI_DIEN
+		FROM
+		lien_he
+		LEFT OUTER JOIN nguoi_dung ON lien_he.ID_NGUOI_LIEN_HE = nguoi_dung.ID
+		WHERE
+			lien_he.ID = `id`;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `contact_update`(IN `id` int, IN `id_phan_hoi` int, IN `ho_ten` varchar(200), IN `email` varchar(256), IN `tieu_de` varchar(256), IN `du_lieu_lien_he` varchar(128), IN `trang_thai` tinyint, IN `da_xem` tinyint, IN `quan_trong` tinyint, IN `spam` tinyint, IN `rac` tinyint)
+BEGIN
+	#Routine body goes here...
+	UPDATE lien_he 
+			SET lien_he.ID_PHAN_HOI = COALESCE(`id_phan_hoi` ,lien_he.ID_PHAN_HOI),
+					lien_he.HO_TEN = COALESCE(`ho_ten` ,lien_he.HO_TEN),
+					lien_he.EMAIL = COALESCE(`email` ,lien_he.EMAIL),
+					lien_he.TIEU_DE = COALESCE(`tieu_de` ,lien_he.TIEU_DE),
+					lien_he.DU_LIEU_LIEN_HE = COALESCE(`du_lieu_lien_he` ,lien_he.DU_LIEU_LIEN_HE),
+					lien_he.TRANG_THAI = COALESCE(`trang_thai` ,lien_he.TRANG_THAI),
+					lien_he.DA_XEM = COALESCE(`da_xem` ,lien_he.DA_XEM),
+					lien_he.QUAN_TRONG = COALESCE(`quan_trong` ,lien_he.QUAN_TRONG),
+					lien_he.SPAM = COALESCE(`spam` ,lien_he.SPAM),
+					lien_he.RAC = COALESCE(`rac` ,lien_he.RAC)
+			WHERE lien_he.ID = `id`;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `info_select`(IN `loai_tt` tinyint(4))
@@ -190,7 +233,7 @@ END$$
 --
 -- Functions
 --
-CREATE DEFINER=`root`@`localhost` FUNCTION `contact_count`(`key` varchar(256), `trang_thai` tinyint, `da_xem` bit, `quan_trong` bit) RETURNS int(11)
+CREATE DEFINER=`root`@`localhost` FUNCTION `contact_count`(`key` varchar(256), `trang_thai` tinyint, `da_xem` tinyint, `quan_trong` tinyint, `spam` tinyint, `rac` tinyint) RETURNS int(11)
 BEGIN
 	DECLARE ts_lh int; 	
 	SET ts_lh = 0;
@@ -202,7 +245,9 @@ BEGIN
 			(lien_he.TIEU_DE LIKE CONCAT('%',`key` ,'%') OR `key` IS NULL) AND
 			(lien_he.TRANG_THAI = `trang_thai` OR `trang_thai` IS NULL) AND
 			(lien_he.DA_XEM = `da_xem` OR `da_xem` IS NULL) AND
-			(lien_he.QUAN_TRONG = `quan_trong` OR `quan_trong` IS NULL);
+			(lien_he.QUAN_TRONG = `quan_trong` OR `quan_trong` IS NULL) AND
+			(lien_he.SPAM = `spam` OR `spam` IS NULL) AND
+			(lien_he.RAC = `rac` OR `rac` IS NULL);
 
 	return ts_lh;
 END$$
@@ -331,42 +376,45 @@ INSERT INTO `ds_theo_doi` (`ID`, `ID_VAN_DE`, `ID_Y_TUONG`, `ID_NGUOI_DUNG`) VAL
 
 CREATE TABLE IF NOT EXISTS `lien_he` (
   `ID` int(11) NOT NULL,
-  `ID_PHAN_HOI` int(11) DEFAULT NULL,
+  `ID_PHAN_HOI` text,
+  `ID_NGUOI_LIEN_HE` int(11) DEFAULT NULL,
   `HO_TEN` varchar(200) NOT NULL,
   `EMAIL` varchar(256) NOT NULL,
   `TIEU_DE` varchar(256) NOT NULL,
   `DU_LIEU_LIEN_HE` varchar(128) NOT NULL,
   `TRANG_THAI` tinyint(4) NOT NULL DEFAULT '1',
   `THOI_DIEM_CAP_NHAT` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `DA_XEM` bit(1) NOT NULL DEFAULT b'0',
-  `QUAN_TRONG` bigint(1) NOT NULL DEFAULT '0'
+  `DA_XEM` tinyint(4) NOT NULL DEFAULT '2',
+  `QUAN_TRONG` tinyint(4) NOT NULL DEFAULT '2',
+  `SPAM` tinyint(4) DEFAULT '2',
+  `RAC` tinyint(4) NOT NULL DEFAULT '2'
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `lien_he`
 --
 
-INSERT INTO `lien_he` (`ID`, `ID_PHAN_HOI`, `HO_TEN`, `EMAIL`, `TIEU_DE`, `DU_LIEU_LIEN_HE`, `TRANG_THAI`, `THOI_DIEM_CAP_NHAT`, `DA_XEM`, `QUAN_TRONG`) VALUES
-(1, 1, 'Anonymous 1', 'anonymous1@gmail.com', 'Liên hệ số 1 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/1.txt', 2, '2017-04-14 15:03:56', b'0', 1),
-(2, 1, 'Anonymous 2', 'anonymous2@gmail.com', 'Liên hệ số 2 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/2.txt', 2, '2017-04-14 15:03:57', b'0', 1),
-(3, 1, 'Anonymous 2', 'anonymous2@gmail.com', 'Liên hệ số 3 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/3.txt', 2, '2017-04-14 15:03:57', b'1', 1),
-(4, 1, 'Anonymous 3', 'anonymous3@gmail.com', 'Liên hệ số 4 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/4.txt', 4, '2017-04-14 14:52:55', b'0', 0),
-(5, 1, 'Anonymous 4', 'anonymous4@gmail.com', 'Liên hệ số 5 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/5.txt', 2, '2017-04-14 14:53:01', b'1', 0),
-(6, 1, 'Anonymous 5', 'anonymous5@gmail.com', 'Liên hệ số 6 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/6.txt', 5, '2017-04-14 14:52:53', b'0', 0),
-(7, 1, 'Anonymous 5', 'anonymous5@gmail.com', 'Liên hệ số 7 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/7.txt', 2, '2017-04-14 14:21:24', b'0', 0),
-(8, 1, 'Anonymous 6', 'anonymous6@gmail.com', 'Liên hệ số 8 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/8.txt', 4, '2017-04-14 15:03:59', b'0', 1),
-(9, 1, 'Anonymous 7', 'anonymous7@gmail.com', 'Liên hệ số 9 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/9.txt', 2, '2017-04-14 14:53:00', b'1', 0),
-(10, 1, 'Anonymous 8', 'anonymous8@gmail.com', 'Liên hệ số 10 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/10.txt', 5, '2017-04-14 14:52:59', b'0', 0),
-(11, 1, 'Anonymous 9', 'anonymous9@gmail.com', 'Liên hệ số 11 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/11.txt', 5, '2017-04-14 14:55:58', b'0', 0),
-(12, 1, 'Anonymous 10', 'anonymous10@gmail.com', 'Liên hệ số 12 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/12.txt', 2, '2017-04-14 15:04:02', b'0', 1),
-(13, 1, 'guest 1', 'guest1@gmail.com', 'Liên hệ số 13 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/13.txt', 2, '2017-04-14 14:21:24', b'0', 0),
-(14, 1, 'Anonymous 11', 'anonymous11@gmail.com', 'Liên hệ số 14 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/14.txt', 3, '2017-04-14 14:21:24', b'0', 0),
-(15, 1, 'guest 2', 'guest2@gmail.com', 'Liên hệ số 15 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/15.txt', 2, '2017-04-11 14:21:24', b'0', 0),
-(16, NULL, 'Anonymous 12', 'anonymous12@gmail.com', 'Liên hệ số 16 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/16.txt', 1, '2017-04-14 14:21:24', b'0', 0),
-(17, NULL, 'Anonymous 13', 'anonymous13@gmail.com', 'Liên hệ số 17 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/17.txt', 1, '2017-04-14 14:21:24', b'0', 0),
-(18, NULL, 'guest 3', 'guest3@gmail.com', 'Liên hệ số 18 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/18.txt', 1, '2017-04-14 14:21:24', b'0', 0),
-(19, NULL, 'Anonymous 14', 'anonymous14@gmail.com', 'Liên hệ số 19 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/19.txt', 1, '2017-04-14 14:21:24', b'0', 0),
-(20, NULL, 'Anonymous 15', 'anonymous15@gmail.com', 'Liên hệ số 20 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/20.txt', 1, '2017-04-14 14:21:24', b'0', 0);
+INSERT INTO `lien_he` (`ID`, `ID_PHAN_HOI`, `ID_NGUOI_LIEN_HE`, `HO_TEN`, `EMAIL`, `TIEU_DE`, `DU_LIEU_LIEN_HE`, `TRANG_THAI`, `THOI_DIEM_CAP_NHAT`, `DA_XEM`, `QUAN_TRONG`, `SPAM`, `RAC`) VALUES
+(1, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg[]3_anonymous1 ++./uploads/images/avatar/anonymous1.jpg', 4, 'Anonymous 1', 'anonymous1@gmail.com', 'Liên hệ số 1 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/1.txt', 4, '2017-04-22 10:59:49', 2, 2, 2, 1),
+(2, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg', 4, 'Anonymous 2', 'anonymous2@gmail.com', 'Liên hệ số 2 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/2.txt', 4, '2017-04-22 10:50:44', 2, 2, 2, 1),
+(3, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg', 4, 'Anonymous 2', 'anonymous2@gmail.com', 'Liên hệ số 3 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/3.txt', 4, '2017-04-22 10:50:49', 2, 2, 2, 1),
+(4, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg', 6, 'Anonymous 3', 'anonymous3@gmail.com', 'Liên hệ số 4 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/4.txt', 4, '2017-04-22 10:50:49', 2, 2, 2, 1),
+(5, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg', 7, 'Anonymous 4', 'anonymous4@gmail.com', 'Liên hệ số 5 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/5.txt', 4, '2017-04-22 10:50:50', 2, 2, 2, 1),
+(6, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg', 7, 'Anonymous 5', 'anonymous5@gmail.com', 'Liên hệ số 6 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/6.txt', 4, '2017-04-22 10:50:50', 2, 2, 2, 1),
+(7, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg', 8, 'Anonymous 5', 'anonymous5@gmail.com', 'Liên hệ số 7 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/7.txt', 3, '2017-04-22 10:50:51', 2, 1, 2, 2),
+(8, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg', 9, 'Anonymous 6', 'anonymous6@gmail.com', 'Liên hệ số 8 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/8.txt', 4, '2017-04-22 10:50:51', 2, 2, 2, 1),
+(9, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg', 10, 'Anonymous 7', 'anonymous7@gmail.com', 'Liên hệ số 9 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/9.txt', 2, '2017-04-22 10:50:51', 2, 1, 2, 2),
+(10, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg', 11, 'Anonymous 8', 'anonymous8@gmail.com', 'Liên hệ số 10 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/10.txt', 4, '2017-04-22 10:50:52', 2, 2, 2, 1),
+(11, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg', 12, 'Anonymous 9', 'anonymous9@gmail.com', 'Liên hệ số 11 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/11.txt', 4, '2017-04-22 10:50:58', 2, 2, 2, 1),
+(12, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg', 12, 'Anonymous 10', 'anonymous10@gmail.com', 'Liên hệ số 12 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/12.txt', 4, '2017-04-22 10:50:57', 2, 2, 2, 1),
+(13, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg', NULL, 'guest 1', 'guest1@gmail.com', 'Liên hệ số 13 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/13.txt', 3, '2017-04-22 10:50:57', 2, 2, 2, 2),
+(14, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg', 13, 'Anonymous 11', 'anonymous11@gmail.com', 'Liên hệ số 14 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/14.txt', 1, '2017-04-22 10:50:56', 2, 2, 2, 2),
+(15, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg', NULL, 'guest 2', 'guest2@gmail.com', 'Liên hệ số 15 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/15.txt', 4, '2017-04-22 10:50:56', 2, 2, 2, 1),
+(16, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg', 14, 'Anonymous 12', 'anonymous12@gmail.com', 'Liên hệ số 16 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/16.txt', 1, '2017-04-22 11:27:28', 2, 1, 2, 2),
+(17, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg', 15, 'Anonymous 13', 'anonymous13@gmail.com', 'Liên hệ số 17 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/17.txt', 4, '2017-04-22 11:27:31', 2, 2, 2, 1),
+(18, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg', NULL, 'guest 3', 'guest3@gmail.com', 'Liên hệ số 18 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/18.txt', 4, '2017-04-22 11:27:32', 2, 2, 2, 1),
+(19, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg', NULL, 'Anonymous 14', 'anonymous14@gmail.com', 'Liên hệ số 19 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/19.txt', 4, '2017-04-22 11:27:33', 2, 2, 2, 1),
+(20, '1_Ngô Giang Thanh ++./uploads/images/avatar/ngogiangthanh.jpg', 17, 'Anonymous 15', 'anonymous15@gmail.com', 'Liên hệ số 20 tiêu đề hơi bị dài luôn đó nhá!', './backend/data/20.txt', 1, '2017-04-22 10:50:53', 2, 2, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -424,7 +472,7 @@ CREATE TABLE IF NOT EXISTS `nguoi_dung` (
 
 INSERT INTO `nguoi_dung` (`ID`, `URL_DAI_DIEN`, `HO_TEN`, `NGAY_SINH`, `GIOI_TINH`, `EMAIL`, `DIA_CHI`, `SDT`, `TAI_KHOAN`, `MAT_KHAU`, `MAT_KHAU_GOC`, `QUYEN_HAN`, `TRANG_THAI`, `THOI_DIEM_TAO`, `CAU_NOI`) VALUES
 (1, './uploads/images/avatar/ngogiangthanh.jpg', 'Ngô Giang Thanh', '1992-02-08', 1, 'thanhthanh1516@gmail.com', '132/28, đường 3 tháng 2, p. Hưng Lợi, q. Ninh Kiều, tp. Cần Thơ', '0946344233', 'ngogiangthanh', '3709a5fc9f1dc01159794fe0f31d8d33', '16753491516', 2, 1, '2017-03-01 19:22:30', 'Người không vì mình trời chu đất diệt'),
-(3, './uploads/images/avatar/anonymous1.jpg', 'anonymous1', '1992-01-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous1', '35705de1978a792d689f6725d5926225', '1675349', 1, 1, '2017-03-02 19:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
+(3, './uploads/images/avatar/anonymous1.jpg', 'anonymous1', '1992-01-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous1', '35705de1978a792d689f6725d5926225', '1675349', 2, 1, '2017-03-02 19:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
 (4, './uploads/images/avatar/anonymous2.jpg', 'anonymous2', '1992-02-11', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous2', '35705de1978a792d689f6725d5926225', '1675349', 1, 1, '2017-03-03 09:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
 (5, './uploads/images/avatar/default.png', 'anonymous3', '1992-03-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous3', '35705de1978a792d689f6725d5926225', '1675349', 1, 2, '2017-03-03 19:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
 (6, './uploads/images/avatar/default.png', 'anonymous4', '1992-04-01', 3, 'Không email', 'Không địa chỉ', 'Không sđt', 'anonymous4', '35705de1978a792d689f6725d5926225', '1675349', 1, 2, '2017-03-04 19:22:35', 'Cùng nhau chia sẽ, lâu lâu mới hiểu'),
@@ -678,7 +726,7 @@ ALTER TABLE `ds_theo_doi`
 -- Indexes for table `lien_he`
 --
 ALTER TABLE `lien_he`
-  ADD PRIMARY KEY (`ID`), ADD KEY `FK_PHAN_HOI_LIEN_HE` (`ID_PHAN_HOI`);
+  ADD PRIMARY KEY (`ID`), ADD KEY `NGUOI_LIEN_HE_NGUOI_DUNG` (`ID_NGUOI_LIEN_HE`);
 
 --
 -- Indexes for table `linh_vuc`
@@ -822,7 +870,7 @@ ADD CONSTRAINT `FK_Y_TUONG_THEO_DOI` FOREIGN KEY (`ID_Y_TUONG`) REFERENCES `y_tu
 -- Constraints for table `lien_he`
 --
 ALTER TABLE `lien_he`
-ADD CONSTRAINT `FK_PHAN_HOI_LIEN_HE` FOREIGN KEY (`ID_PHAN_HOI`) REFERENCES `nguoi_dung` (`ID`);
+ADD CONSTRAINT `NGUOI_LIEN_HE_NGUOI_DUNG` FOREIGN KEY (`ID_NGUOI_LIEN_HE`) REFERENCES `nguoi_dung` (`ID`);
 
 --
 -- Constraints for table `phan_hoi`

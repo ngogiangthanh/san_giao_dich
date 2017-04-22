@@ -1,6 +1,6 @@
 <?php require('backend/views/commons/header.php'); ?>
-  <!-- iCheck -->
-  <link rel="stylesheet" href="backend/public/plugins/iCheck/flat/blue.css">
+<!-- iCheck -->
+<link rel="stylesheet" href="backend/public/plugins/iCheck/flat/blue.css">
 <body class="hold-transition skin-blue sidebar-mini">
 
     <div class="wrapper">

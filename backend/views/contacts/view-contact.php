@@ -5,74 +5,52 @@
         <div class="box-header">
             <i class="fa fa-comments-o"></i>
 
-            <h3 class="box-title">Chat</h3>
+            <h3 class="box-title">Gửi trả lời liên hệ</h3>
 
-            <div class="box-tools pull-right" data-toggle="tooltip" title="Status">
-                <div class="btn-group" data-toggle="btn-toggle">
-                    <button type="button" class="btn btn-default btn-sm active"><i class="fa fa-square text-green"></i>
-                    </button>
-                    <button type="button" class="btn btn-default btn-sm"><i class="fa fa-square text-red"></i></button>
-                </div>
-            </div>
         </div>
         <div class="box-body chat" id="chat-box">
-            <!-- chat item -->
-            <div class="item">
-                <img src="backend/public/dist/img/user4-128x128.jpg" alt="user image" class="online">
+            <?php
+            for ($i = 1; $i < $chat_length; $i++) {
+                $element = explode("#@#", $chat_content[$i]);
+                ?>
+                <!-- chat item -->
+                <div class="item">
+                    <?php
+                    if ($element[0] == $contact->ID_NGUOI_LIEN_HE | $element[0] == "null")
+                    {
+                        ?>
 
-                <p class="message">
-                    <a href="#" class="name">
-                        <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 2:15</small>
-                        Mike Doe
-                    </a>
-                    I would like to meet you to discuss the latest news about
-                    the arrival of the new theme. They say it is going to be one the
-                    best themes on the market
-                </p>
-                <div class="attachment">
-                    <h4>Attachments:</h4>
+                    <img src="<?= $element[0] == "null" ? "./uploads/images/avatar/default.png" : $contact->URL_DAI_DIEN; ?>" width="128px" alt="user image" class="online">
 
-                    <p class="filename">
-                        Theme-thumbnail-image.jpg
+                    <p class="message">
+                        <a href="#" class="name">
+                            <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> <?= get_day_name($element[2]) ?></small>
+                        <?= $element[0] == "null" ? $contact->HO_TEN : $contact->HO_TEN_PHAN_HOI; ?>
+                        </a>
+                        <?= $element[1] ?>
                     </p>
+                    <?php
+                    }
+                    else{
+                        ?>
+                    
+                    <img src="<?=explode("++",$user_data[$element[0]])[1]?>" width="128px" alt="user image" class="online">
 
-                    <div class="pull-right">
-                        <button type="button" class="btn btn-primary btn-sm btn-flat">Open</button>
-                    </div>
+                    <p class="message">
+                        <a href="#" class="name">
+                            <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> <?= get_day_name($element[2]) ?></small>
+                        <?= explode("++",$user_data[$element[0]])[0] ?>
+                        </a>
+                        <?= $element[1] ?>
+                    </p>
+                    
+                    <?php
+                    }
+                    ?>
                 </div>
-                <!-- /.attachment -->
-            </div>
-            <!-- /.item -->
-            <!-- chat item -->
-            <div class="item">
-                <img src="backend/public/dist/img/user3-128x128.jpg" alt="user image" class="offline">
-
-                <p class="message">
-                    <a href="#" class="name">
-                        <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 5:15</small>
-                        Alexander Pierce
-                    </a>
-                    I would like to meet you to discuss the latest news about
-                    the arrival of the new theme. They say it is going to be one the
-                    best themes on the market
-                </p>
-            </div>
-            <!-- /.item -->
-            <!-- chat item -->
-            <div class="item">
-                <img src="backend/public/dist/img/user2-160x160.jpg" alt="user image" class="offline">
-
-                <p class="message">
-                    <a href="#" class="name">
-                        <small class="text-muted pull-right"><i class="fa fa-clock-o"></i> 5:30</small>
-                        Susan Doe
-                    </a>
-                    I would like to meet you to discuss the latest news about
-                    the arrival of the new theme. They say it is going to be one the
-                    best themes on the market
-                </p>
-            </div>
-            <!-- /.item -->
+                <?php
+            }
+            ?>
         </div>
         <!-- /.chat -->
         <div class="box-footer">

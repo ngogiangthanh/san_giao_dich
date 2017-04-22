@@ -55,7 +55,7 @@
                         <?php
                         if ($search != "") {
                             ?> 
-                            <a class="btn btn-default" href='admin.php?controller=contacts' title="Xóa thông tin tìm kiếm"><i class="glyphicon glyphicon-remove"></i></a>
+                            <a class="btn btn-default" href='<?=$actual_link?>' title="Xóa thông tin tìm kiếm"><i class="glyphicon glyphicon-remove"></i></a>
 
                             <?php
                         } else {
@@ -72,87 +72,95 @@
             <!-- /.box-tools -->
         </div>
         <!-- /.box-header -->
-        <div class="box-body no-padding">
+        <form action="admin.php?controller=contacts&action=remove" method="POST" name="remove-contact-form" onsubmit="">
+            <div class="box-body no-padding">
+                <?php if ($contactCount > 0) { ?>
 
-            <?php if ($contactCount > 0) { ?>
-
-                <div class="mailbox-controls">
-                    <!-- Check all button -->
-                    <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
-                    </button>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
-                    </div>
-                    <!-- /.btn-group -->
-                    <button type="button" class="btn btn-default btn-sm" onclick="location.reload();"><i class="fa fa-refresh"></i></button>
-                    <div class="pull-right">
-                        <?= $pagination ?>
+                    <div class="mailbox-controls">
+                        <!-- Check all button -->
+                        <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
+                        </button>
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+                        </div>
                         <!-- /.btn-group -->
+                        <button type="button" class="btn btn-default btn-sm" onclick="location.reload();"><i class="fa fa-refresh"></i></button>
+                        <div class="pull-right">
+                            <?= $pagination ?>
+                            <!-- /.btn-group -->
+                        </div>
                     </div>
-                </div>
 
-                <?php
-            }
-            ?>
-            <div class="table-responsive mailbox-messages">
-                <table class="table table-hover table-striped">
-                    <tbody>
-                        <?php
-                        foreach ($contacts as $contact) {
-                            ?>
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                <td class="mailbox-star"><a href="#"><i class="fa fa-star<?= $contact->QUAN_TRONG ? "" : "-o" ?> text-yellow"></i></a></td>
-                                <td class="mailbox-name"><a href="admin.php?controller=contacts&action=view"><?= $contact->DA_XEM ? "<b>" . $contact->HO_TEN . "</b>" : $contact->HO_TEN ?></a></td>
-                                <td class="mailbox-subject"><?= $contact->DA_XEM ? "<b>" . $contact->TIEU_DE . "</b>" : $contact->TIEU_DE ?>
-                                </td>
-                                <td class="mailbox-date"><?= get_day_name($contact->THOI_DIEM_CAP_NHAT) ?></td>
-                            </tr>
+                    <?php
+                }
+                ?>
+                <div class="table-responsive mailbox-messages">
+                    <table class="table table-hover table-striped">
+                        <tbody>
                             <?php
-                        }
-                        ?>
-                    </tbody>
+                            foreach ($contacts as $contact) {
+                                ?>
+                                <tr>
+                                    <td><input type="checkbox" name="checkremove[]" value="<?= $contact->ID ?>"></td>
+                                    <?php
+                                    if($trash != 1){
+                                        ?>
+                                    <td class="mailbox-star"><a href="#" onclick="makeImportant(<?= $contact->ID ?>, <?= $contact->QUAN_TRONG ?>)"><i class="fa fa-star<?= $contact->QUAN_TRONG == 1 ? "" : "-o" ?> text-yellow"></i></a></td>
+                                    <?php
+                                    }
+                                    ?>
+                                    <td class="mailbox-name"><a href="admin.php?controller=contacts&action=view&id=<?= $contact->ID ?>"><?= $contact->DA_XEM == 1 ? "<b>" . $contact->HO_TEN . "</b>" : $contact->HO_TEN ?></a></td>
+                                    <td class="mailbox-subject"><?= $contact->DA_XEM == 1 ? "<b>" . $contact->TIEU_DE . "</b>" : $contact->TIEU_DE ?>
+                                    </td>
+                                    <td class="mailbox-date"><?= get_day_name($contact->THOI_DIEM_CAP_NHAT) ?></td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
+                        </tbody>
 
-                    <?php if ($contactCount == 0) { ?>
+                        <?php if ($contactCount == 0) { ?>
 
-                        <tfoot>
-                            <tr>
-                                <td colspan="5" class="text-center">
-                                    Không có liên hệ nào
-                                </td>
-                            </tr>
-                        </tfoot>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="<?=$trash != 1 ? 5 : 4?>" class="text-center">
+                                        Không có liên hệ nào
+                                    </td>
+                                </tr>
+                            </tfoot>
                         <?php }
-                    ?>
-                </table>
-                <!-- /.table -->
-            </div>
-            <!-- /.mail-box-messages -->
-        </div>
-        <!-- /.box-body -->
-        <div class="box-footer no-padding">
-
-            <?php if ($contactCount > 0) { ?>
-
-                <div class="mailbox-controls">
-                    <!-- Check all button -->
-                    <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
-                    </button>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
-                    </div>
-                    <!-- /.btn-group -->
-                    <button type="button" class="btn btn-default btn-sm" onclick="location.reload();"><i class="fa fa-refresh"></i></button>
-                    <div class="pull-right">
-                        <?= $pagination ?>
-                        <!-- /.btn-group -->
-                    </div>
-                    <!-- /.pull-right -->
+                        ?>
+                    </table>
+                    <!-- /.table -->
                 </div>
-                <?php
-            }
-            ?>
-        </div>
+                <!-- /.mail-box-messages -->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer no-padding">
+
+                <?php if ($contactCount > 0) { ?>
+
+                    <div class="mailbox-controls">
+                        <!-- Check all button -->
+                        <button type="button" class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i>
+                        </button>
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
+                        </div>
+                        <!-- /.btn-group -->
+                        <button type="button" class="btn btn-default btn-sm" onclick="location.reload();"><i class="fa fa-refresh"></i></button>
+                        <div class="pull-right">
+                            <?= $pagination ?>
+                            <!-- /.btn-group -->
+                        </div>
+                        <!-- /.pull-right -->
+                    </div>
+                    <?php
+                }
+                ?>
+            </div>
+
+        </form>
     </div>
     <!-- /. box -->
 </div>

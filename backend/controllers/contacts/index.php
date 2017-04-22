@@ -7,6 +7,8 @@ $title = "Trang chủ quản lý các liên hệ";
 
 $search = null;
 $status = null;
+$spam = 2;
+$trash = 2;
 $seen = null;
 $important = null;
 $url = 'admin.php?controller=contacts';
@@ -26,7 +28,15 @@ $important_arr = array(
 
 if(isset($_GET['status'])){
     if(array_key_exists($_GET['status'],$status_arr)){
-        $status = $status_arr[$_GET['status']];
+        if($status_arr[$_GET['status']] == 4){
+            $spam = 1;
+        }
+        else if($status_arr[$_GET['status']] == 5){
+            $trash = 1;
+        }
+        else{
+           $status = $status_arr[$_GET['status']];
+        }
         $url .= "&status=".$_GET['status'];
     } 
     else {
@@ -53,15 +63,14 @@ $page = (isset($_GET['page'])) ? intval($_GET['page']) : 1;
 $page = ($page > 0) ? $page : 1;
 $offset = ($page - 1) * LIMIT_PER_PAGE;
 
-$contactCount = contactCount($search, $status, $seen, $important, $conn->app);
-$contactCountAll = contactCount(null, null, null, null, $conn->app);
-$contactSpamCount = contactCount(null, 4, null, null, $conn->app);
-$contactTrashCount = contactCount(null, 5, null, null, $conn->app);
 
-$contacts = contactSelect($search, $status, $seen, $important, $offset, LIMIT_PER_PAGE, $conn->app);
-
+$contactCount = contactCount($search, $status, $seen, $important, $spam, $trash, $conn->app);
+$contactCountAll = contactCount(null, null, null, null, 2, 2, $conn->app);
+$contactSpamCount = contactCount(null, null, null, null, 1, null, $conn->app);
+$contactTrashCount = contactCount(null, null, null, null, null, 1, $conn->app);
+$contacts = contactSelect($search, $status, $seen, $important, $spam, $trash, $offset, LIMIT_PER_PAGE, $conn->app);
 $total = ceil($contactCount / LIMIT_PER_PAGE);
 $pagination = pagination($url, $page, $total);
-
+$actual_link = explode("&search",(isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]")[0];
 //load view ====================================================================
 require('./backend/views/contacts/index.php');

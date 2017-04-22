@@ -13,7 +13,7 @@ $gender = array(
 );
 
 
-$totalContact = contactCount(null,null, null, null, $conn->app);
+$totalContact = contactCount(null,null, null, null, null, null, $conn->app);
 $totalIdea = ideaCount($conn->app);
 $totalSolution = solutionCount($conn->app);
 $totalUser = userCount($conn->app);
