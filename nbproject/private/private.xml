@@ -2,14 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/xampp/htdocs/san_giao_dich/backend/views/commons/aside.php</file>
-            <file>file:/C:/xampp/htdocs/san_giao_dich/backend/views/contacts/table.php</file>
-            <file>file:/C:/xampp/htdocs/san_giao_dich/backend/views/commons/js.php</file>
-            <file>file:/C:/xampp/htdocs/san_giao_dich/backend/views/contacts/view.php</file>
-            <file>file:/C:/xampp/htdocs/san_giao_dich/backend/controllers/contacts/index.php</file>
-            <file>file:/C:/xampp/htdocs/san_giao_dich/backend/views/contacts/view-contact.php</file>
-            <file>file:/C:/xampp/htdocs/san_giao_dich/backend/views/contacts/index.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>
