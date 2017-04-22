@@ -1,0 +1,212 @@
+
+<?php
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Sàn Giao Dịch Ý Tưởng</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/prettyPhoto.css" rel="stylesheet">
+    <link href="css/price-range.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+	<link href="css/main.css" rel="stylesheet">
+	<link href="css/responsive.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->       
+    <link rel="shortcut icon" href="images/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="11212x11212" href="images/ico/apple-touch-icon-11212-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="1112x1112" href="images/ico/apple-touch-icon-1112-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+	<script src="js/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+</head><!--/head-->
+
+<body>
+<table class="table table-striped">
+ <thead>
+	<tr>
+		<th>ID</th>
+		<th>URL Thumbnail</th>
+		<th>Tên ý Tưởng</th>
+		<th>Lĩnh Vực</th>
+		<th>URL File</th>
+		<th>Tag</th>
+		<th>Ngày Đăng</th>
+		<th>Ngày Sửa</th>	
+		<th>Trạng Thái</th>
+		<th>Thao Tác</th>
+	</tr>
+ </thead>
+<tbody class="text-center">
+	<tr>
+		<th>1</th>
+		<th>C:\xampp\htdocs\san_giao_dich\database</th>
+		<th>lột quân quăng sông</th>
+		<th>Giải pháp kinh doanh</th>
+		<th>C:\xampp\htdocs\san_giao_dich\database</th>
+		<th>Quần, Sông, lột</th>
+		<th>19/5/1989</th>
+		<th>21/5/1989</th>	
+		<th>
+			<span class="badge bg-green">Công Khai</span>
+		</th>
+		<th>
+			<a href="#" class="btn btn-xs btn-success" data-toggle="modal" data-target="#myModal">
+			<span class="glyphicon glyphicon-edit"></span>
+			</a>
+			<a href="#" class="btn btn-xs btn-danger">
+			<span class="glyphicon glyphicon-remove-sign"></span>
+			</a>
+		</th>
+	</tr>
+</tbody>
+</table>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body col-lg-12 well">
+        <form class="form-horizontal">
+			<fieldset>
+			<!-- Form Name -->
+			<legend>Thêm Ý Tưởng</legend>
+
+			<!-- File Button --> 
+			<div class="form-group text-left">
+			  <label class="col-md-2 control-label text-left" for="bt_hinh">Hình ý tưởng</label>
+			  <div class="col-md-10">
+				<input id="bt_hinh" name="bt_hinh" class="input-file" type="file">
+			  </div>
+			</div>
+
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-2 control-label" for="txt_tenytuong">Tên ý tưởng</label>  
+			  <div class="col-md-10">
+			  <input id="ten_ytuong" name="ten_ytuong" type="text" placeholder="Tên Ý Tưởng" class="form-control input-md" required="">
+				
+			  </div>
+			</div>
+			<!-- Select Basic -->
+			<div class="form-group">
+			  <label class="col-md-2 control-label" for="cbb_linhvuc">Lĩnh vực</label>
+			  <div class="col-md-10">
+				<select id="selectbasic" name="selectbasic" class="form-control">
+				  <option value="1">Công nghệ thông tin</option>
+				  <option value="2">Giải pháp kinh doanh</option>
+				  <option value="3">Công nghệ thực phẩm</option>
+				</select>
+			  </div>
+			</div>
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-2 control-label" for="name1">Tác giả</label>  
+			  <div class="col-md-10">
+			  <input id="name1" name="name1" type="text" placeholder="Tác giả 1" class="form-control input-md">
+				
+			  </div>
+			</div>
+
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-2 control-label" for="name2"></label>  
+			  <div class="col-md-10">
+			  <input id="name2" name="name2" type="text" placeholder="Tác giả 2" class="form-control input-md">
+				
+			  </div>
+			</div>
+
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-2 control-label" for="txt_name3"></label>  
+			  <div class="col-md-10">
+			  <input id="txt_name3" name="txt_name3" type="text" placeholder="Tác giả 3" class="form-control input-md">
+				
+			  </div>
+			</div>
+
+			<!-- File Button --> 
+			<div class="form-group">
+			  <label class="col-md-2 control-label" for="bt_load">File ý tưởng</label>
+			  <div class="col-md-10">
+				<input id="bt_load" name="bt_load" class="input-file" type="file">
+			  </div>
+			</div>
+
+			<!-- Textarea -->
+			<div class="form-group">
+			  <label class="col-md-2 control-label" for="txt_tomtat">Tóm tắt ý tưởng</label>
+			  <div class="col-md-10">                     
+				<textarea class="form-control" id="txt_tomtat" name="txt_tomtat"></textarea>
+			  </div>
+			</div>
+
+			<!-- Textarea -->
+			<div class="form-group">
+			  <label class="col-md-2 control-label" for="txt_chitiet">Chi tiết ý tưởng</label>
+			  <div class="col-md-10">                     
+				<textarea class="form-control" id="txt_chitiet" name="txt_chitiet"></textarea>
+			  </div>
+			</div>
+
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-2 control-label" for="txt_tag">Tag</label>  
+			  <div class="col-md-10">
+			  <input id="txt_tag" name="txt_tag" type="text" placeholder="" class="form-control input-md">
+				
+			  </div>
+			</div>
+
+			<!-- Multiple Radios -->
+			<div class="form-group">
+			  <label class="col-md-2 control-label" for="rb_trangthai">Trạng thái</label>
+			  <div class="col-md-10">
+			  <div class="radio">
+				<label for="rb_trangthai-0">
+				  <input type="radio" name="rb_trangthai" id="rb_trangthai-0" value="1" checked="checked">
+				  Công Khai
+				</label>
+				</div>
+			  <div class="radio">
+				<label for="rb_trangthai-1">
+				  <input type="radio" name="rb_trangthai" id="rb_trangthai-1" value="2">
+				  Riêng Tư
+				</label>
+				</div>
+			  <div class="radio">
+				<label for="rb_trangthai-2">
+				  <input type="radio" name="rb_trangthai" id="rb_trangthai-2" value="3">
+				  Khóa
+				</label>
+				</div>
+			  </div>
+			</div>
+			<!-- Button (Double) -->
+			<div class="form-group">
+			  <div class="col-md-12">
+				<button id="bt_them" name="bt_them" class="btn btn-success">Lưu</button>
+				<button id="bt_huy" name="bt_huy" class="btn btn-warning">Nhập Lại</button>
+			  </div>
+			</div>
+
+			</fieldset>
+		</form>
+
+
+      </div>
+      
+    </div>
+  </div>
+</div>
+</body>
+</html>
